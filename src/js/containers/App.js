@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
+import ProjectList from '../components/ProjectList';
 
 class App extends Component {
     render() {
         return (
-            <h2>Hello from Plan Everything client!</h2>
+            <ProjectList/>
         );
     }
 }
