@@ -1,7 +1,7 @@
 {
   "baseUrl": "http://localhost:8080/",
   "client": {
-    "id": "web-plan-everything",
-    "secret": "admin"
+    "id": "client-id",
+    "secret": "client-password"
   }
 }

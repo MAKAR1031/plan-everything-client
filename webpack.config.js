@@ -1,4 +1,3 @@
-const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
@@ -7,17 +6,17 @@ module.exports = {
         './js/index.js'
     ],
     output: {
-        path: __dirname + "/public",
-        publicPath: '/public',
+        path: __dirname + "/dist",
+        publicPath: '/dist',
         filename: 'bundle.js'
     },
     module: {
         rules: [
             {
-                test: /\.scss$/,
+                test: /\.css$/,
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
-                    use: ['css-loader', 'sass-loader']
+                    use: ['css-loader']
                 })
             },
             {
@@ -31,7 +30,7 @@ module.exports = {
         new ExtractTextPlugin('css/style.css')
     ],
     devServer: {
-        contentBase: __dirname + '/public',
+        contentBase: __dirname + '/dist',
         port: 3000,
         historyApiFallback: true
     }
