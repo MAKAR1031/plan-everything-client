@@ -1,4 +1,4 @@
-const initialState = [];
+const initialState = null;
 
 export default function projects(state = initialState, action) {
     switch (action.type) {

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {login} from "../actions/login_actions";
+import {Link} from 'react-router-dom'
 
 class LoginForm extends Component {
     state = {
@@ -41,6 +42,7 @@ class LoginForm extends Component {
             return (
                 <div className='container'>
                     <p>The login is already completed</p>
+                    <Link className='btn btn-secondary' role='button' to="/projects">Go to projects</Link>
                 </div>
             );
         } else {

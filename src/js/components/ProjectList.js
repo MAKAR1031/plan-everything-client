@@ -9,10 +9,24 @@ class ProjectList extends Component {
         this.props.load();
     }
 
+    projects = () => this.props.projectData['_embedded'].projects;
+
     render() {
-        return (
-            <div/>
-        )
+        if (this.props.projectData != null) {
+            return (
+                <ul>
+                    {
+                        this.projects().map((project) => (
+                            <li key={project.name}>{project.name}</li>
+                        ))
+                    }
+                </ul>
+            );
+        } else {
+            return (
+                <div>loading...</div>
+            )
+        }
     }
 }
 
