@@ -1,6 +1,7 @@
-.left-menu {
+.left-menu,
+.right-menu {
     height: 90%;
-    background-color: #343a40;
+    background-color: #484e54;
     color: white;
     text-align: center;
     font-size: 1.2em;
@@ -12,5 +13,5 @@
 
 .project:hover {
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
