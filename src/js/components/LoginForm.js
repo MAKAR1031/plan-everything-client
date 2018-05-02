@@ -10,11 +10,21 @@ class LoginForm extends Component {
         password: ''
     };
 
+    componentDidUpdate() {
+        if (this.props.isAuthorized) {
+            this.props.history.push('/projects');
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.isAuthorized) {
+            this.props.history.push('/projects');
+        }
+    }
+
     changeLogin = evt => this.setState({username: evt.target.value});
 
     changePassword = evt => this.setState({password: evt.target.value});
-
-    hasToken = () => this.props.token !== '';
 
     onLogin = () => {
         this.props.login(this.state.username, this.state.password);
@@ -38,7 +48,7 @@ class LoginForm extends Component {
                 </div>
             </div>
         );
-        if (this.hasToken()) {
+        if (this.props.isAuthorized) {
             return (
                 <div className='container'>
                     <p>The login is already completed</p>
@@ -52,7 +62,7 @@ class LoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    token: state.token
+    isAuthorized: state.isAuthorized
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

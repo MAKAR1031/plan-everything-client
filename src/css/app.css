@@ -1,0 +1,16 @@
+.left-menu {
+    height: 90%;
+    background-color: #343a40;
+    color: white;
+    text-align: center;
+    font-size: 1.2em;
+}
+
+.project {
+    transition: 0.3s all;
+}
+
+.project:hover {
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}

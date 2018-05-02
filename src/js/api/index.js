@@ -1,13 +1,26 @@
 import axios from 'axios';
 import apiConfig from './config';
 
-const api = axios.create({
+export const baseUrlApi = axios.create({
     baseURL: apiConfig.baseUrl,
     headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('token'),
         'Accept': 'application/json',
         'Content-Type': 'application/json'
     }
 });
 
-export default api;
+export const api = axios.create({
+    headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+});
+
+export const authHeader = (other) => {
+    return {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        ...other
+    }
+};

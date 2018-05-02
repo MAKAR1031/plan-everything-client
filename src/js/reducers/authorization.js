@@ -1,13 +1,10 @@
-const initialState = localStorage.getItem('token') ? localStorage.getItem('token') : '';
-
-export default function token(state = initialState, action) {
+export default function isAuthorized(state, action) {
     switch (action.type) {
         case 'AUTHORIZATION_SUCCESS':
-            if (action.token !== '') {
-                localStorage.setItem('token', action.token);
-            }
-            return action.token;
+            return true;
+        case 'LOGOUT':
+            return false;
         default:
-            return state;
+            return localStorage.getItem('token') != null;
     }
 }

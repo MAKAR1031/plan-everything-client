@@ -1,41 +1,88 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {load} from '../actions/projects_actions'
+import {getAuthor, getCurrentMember, load} from '../actions/projects_actions'
 
 class ProjectList extends Component {
 
+    componentDidUpdate() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/');
+        }
+    }
+
     componentDidMount() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/');
+        }
         this.props.load();
     }
 
     projects = () => this.props.projectData['_embedded'].projects;
 
-    render() {
-        if (this.props.projectData != null) {
-            return (
-                <ul>
-                    {
-                        this.projects().map((project) => (
-                            <li key={project.name}>{project.name}</li>
-                        ))
-                    }
-                </ul>
-            );
+    author = (project) => {
+        if (this.props.projectAuthors[project]) {
+            return this.props.projectAuthors[project].fullName;
         } else {
-            return (
-                <div>loading...</div>
-            )
+            this.props.getAuthor(project);
+            return 'loading...';
         }
+    };
+
+    myMemberRole = (project) => {
+        if (this.props.currentProjectMembers[project]) {
+            return this.props.currentProjectMembers[project].role;
+        } else {
+            this.props.getCurrentMember(project);
+            return 'loading...';
+        }
+    };
+
+    onSelect = () => {
+        this.props.history.push('/project');
+    };
+
+    render() {
+        const projectList = this.props.projectData ? this.projects().map((project) => (
+            <div className='card project' key={project.name} onClick={this.onSelect}>
+                <div className='card-body'>
+                    <div className='row'>
+                        <div className="col-3"><strong>{project.name}</strong></div>
+                        <div className="col-3">{project.createDate}</div>
+                        <div className="col-3">{this.author(project)}</div>
+                        <div className="col-3">{this.myMemberRole(project)}</div>
+                    </div>
+                </div>
+            </div>
+        )) : (
+            <div>loading...</div>
+        );
+
+        return (
+            <div className='container-fluid'>
+                <div className='row'>
+                    <div className="col-2 left-menu">
+                        <button className='btn btn-secondary'>New project</button>
+                    </div>
+                    <div className="col-10">
+                        <h2 className='text-center mt-2 mb-3'>Project list</h2>
+                        {projectList}
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 
 const mapStateToProps = state => ({
-    projectData: state.projects
+    isAuthorized: state.isAuthorized,
+    projectData: state.projects,
+    projectAuthors: state.projectAuthors,
+    currentProjectMembers: state.currentProjectMembers
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {load},
+    {load, getAuthor, getCurrentMember},
     dispatch
 );
 
