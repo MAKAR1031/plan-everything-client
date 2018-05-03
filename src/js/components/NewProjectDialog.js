@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalFooter, ModalHeader, Button, Row, Col, FormGroup, Label, Input, Alert} from 'reactstrap';
+import {Modal, ModalBody, ModalFooter, ModalHeader, Button, Row, Col, FormGroup, Label, Input, Alert, FormFeedback} from 'reactstrap';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {close, createProject} from '../actions/new_project_dialog_actions';
@@ -7,7 +7,16 @@ import {close, createProject} from '../actions/new_project_dialog_actions';
 class NewProjectDialog extends Component {
     state = {
         name: '',
-        description: ''
+        description: '',
+        invalidName: false
+    };
+
+    resetState = () => {
+        this.setState({
+            name: '',
+            description: '',
+            invalidName: false
+        });
     };
 
     onChangeName = e => this.setState({name: e.target.value});
@@ -18,9 +27,19 @@ class NewProjectDialog extends Component {
 
     authorName = () => this.props.account ? this.props.account.fullName : 'Loading...';
 
-    onSave = () => this.props.createProject(this.state.name, this.state.description);
+    onSave = () => {
+        if (!this.state.name) {
+            this.setState({invalidName: true});
+            return;
+        }
+        this.props.createProject(this.state.name, this.state.description);
+        this.resetState();
+    };
 
-    onClose = () => this.props.close();
+    onClose = () => {
+        this.props.close();
+        this.resetState();
+    };
 
     render() {
         const errorBlock = this.props.error ? (
@@ -39,15 +58,17 @@ class NewProjectDialog extends Component {
                             <FormGroup row>
                                 <Label for="projectName" sm={3}>Name</Label>
                                 <Col sm={9}>
-                                    <Input id="projectName" type="text" name="name" placeholder="Project name"
+                                    <Input id="projectName" type="text" placeholder="Project name"
                                            value={this.state.name}
-                                           onChange={this.onChangeName}/>
+                                           onChange={this.onChangeName}
+                                           invalid={this.state.invalidName}/>
+                                    <FormFeedback>Invalid name</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label for="projectDescription" sm={3}>Description</Label>
                                 <Col sm={9}>
-                                    <Input type="textarea" name="email" id="projectDescription"
+                                    <Input type="textarea" id="projectDescription"
                                            placeholder="Description"
                                            value={this.state.description}
                                            onChange={this.onChangeDescription}/>
@@ -58,14 +79,14 @@ class NewProjectDialog extends Component {
                             <FormGroup row>
                                 <Label sm={3}>Create date</Label>
                                 <Col sm={9}>
-                                    <Input id="projectName" type="text" name="name" placeholder="Project name"
+                                    <Input type="text" placeholder="Project name"
                                            value={this.currentDate()} disabled={true}/>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
                                 <Label sm={3}>Author</Label>
                                 <Col sm={9}>
-                                    <Input id="projectName" type="text" name="name" placeholder="Project name"
+                                    <Input type="text" placeholder="Project name"
                                            value={this.authorName()} disabled={true}/>
                                 </Col>
                             </FormGroup>
