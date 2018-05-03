@@ -2,22 +2,26 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import NewProjectDialog from './NewProjectDialog';
-import {getAuthor, getCurrentMember, load} from '../actions/projects_actions'
+import {getAuthor, getCurrentMember, load, selectProject} from '../actions/projects_actions'
 import {open as openDialog} from '../actions/new_project_dialog_actions';
 
 class ProjectList extends Component {
 
     componentDidUpdate() {
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/');
-        }
+        this.onComponentUpdate();
     }
 
     componentDidMount() {
+        this.onComponentUpdate();
+    }
+
+    onComponentUpdate() {
         if (!this.props.isAuthorized) {
             this.props.history.push('/');
         }
-        this.props.load();
+        if (this.props.projects == null) {
+            this.props.load();
+        }
     }
 
     projects = () => this.props.projectData['_embedded'].projects;
@@ -40,13 +44,14 @@ class ProjectList extends Component {
         }
     };
 
-    onSelect = () => {
+    onSelect = (project) => {
+        this.props.selectProject(project);
         this.props.history.push('/project');
     };
 
     render() {
         const projectList = this.props.projectData ? this.projects().map((project) => (
-            <div className='card project mb-3' key={project.name} onClick={this.onSelect}>
+            <div className='card project mb-3' key={project.name} onClick={() => this.onSelect(project)}>
                 <div className='card-body'>
                     <div className='row'>
                         <div className="col-3"><strong>{project.name}</strong></div>
@@ -85,7 +90,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {load, getAuthor, getCurrentMember, openDialog},
+    {load, getAuthor, getCurrentMember, openDialog, selectProject},
     dispatch
 );
 

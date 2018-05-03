@@ -34,3 +34,10 @@ export const getCurrentMember = (project) => dispatch => {
         console.log(reason);
     });
 };
+
+export const selectProject = (project) => dispatch => {
+    dispatch({
+        type: 'PROJECT_SELECTED',
+        project
+    })
+};
