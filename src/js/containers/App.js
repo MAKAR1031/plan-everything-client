@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Header from '../components/Header';
-import LoginForm from '../components/LoginForm';
+import SignInForm from '../components/SignInForm';
+import SignUpForm from '../components/SignUpForm';
 import ProjectList from '../components/ProjectList';
 import {BrowserRouter, Route} from 'react-router-dom';
 
@@ -10,7 +11,8 @@ class App extends Component {
             <BrowserRouter>
                 <div>
                     <Header/>
-                    <Route exact path='/' component={LoginForm}/>
+                    <Route exact path='/' component={SignInForm}/>
+                    <Route path='/signup' component={SignUpForm}/>
                     <Route path='/projects' component={ProjectList}/>
                 </div>
             </BrowserRouter>

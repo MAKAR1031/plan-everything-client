@@ -15,7 +15,7 @@ const loginApi = axios.create({
     }
 });
 
-export const login = (username, password) => dispatch => {
+export const signIn = (username, password) => dispatch => {
     const data = qs.stringify({username, password, grant_type: 'password'});
     loginApi.post('/oauth/token', data, authHeader()).then(res => {
         localStorage.setItem('token', res.data.access_token);
@@ -32,6 +32,24 @@ export const login = (username, password) => dispatch => {
     }).catch(reason => {
         console.log(reason);
     })
+};
+
+export const signUp = (account) => dispatch => {
+    baseUrlApi.post('/register', account).then(() => {
+        dispatch({
+            type: 'SIGN_UP_SUCCESSFUL'
+        });
+    }).catch(() => {
+        dispatch({
+            type: 'SIGN_UP_FAILED'
+        });
+    })
+};
+
+export const resetSignUpStatus = () => dispatch => {
+    dispatch({
+        type: 'SIGN_UP_STATUS_RESET'
+    });
 };
 
 export const logout = () => dispatch => {

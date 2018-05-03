@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {logout, loadAccount} from "../actions/login_actions";
+import {logout, loadAccount} from "../actions/auth_actions";
 
 class Header extends Component {
 
