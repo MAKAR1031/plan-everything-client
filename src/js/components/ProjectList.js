@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import NewProjectDialog from './NewProjectDialog';
 import {getAuthor, getCurrentMember, load} from '../actions/projects_actions'
+import {open as openDialog} from '../actions/new_project_dialog_actions';
 
 class ProjectList extends Component {
 
@@ -44,7 +46,7 @@ class ProjectList extends Component {
 
     render() {
         const projectList = this.props.projectData ? this.projects().map((project) => (
-            <div className='card project' key={project.name} onClick={this.onSelect}>
+            <div className='card project mb-3' key={project.name} onClick={this.onSelect}>
                 <div className='card-body'>
                     <div className='row'>
                         <div className="col-3"><strong>{project.name}</strong></div>
@@ -62,13 +64,14 @@ class ProjectList extends Component {
             <div className='container-fluid'>
                 <div className='row'>
                     <div className="col-2 left-menu">
-                        <button className='btn btn-secondary'>New project</button>
+                        <button className='btn btn-secondary' onClick={this.props.openDialog}>New project</button>
                     </div>
                     <div className="col-10">
                         <h2 className='text-center mt-2 mb-3'>Project list</h2>
                         {projectList}
                     </div>
                 </div>
+                <NewProjectDialog />
             </div>
         );
     }
@@ -82,7 +85,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {load, getAuthor, getCurrentMember},
+    {load, getAuthor, getCurrentMember, openDialog},
     dispatch
 );
 
