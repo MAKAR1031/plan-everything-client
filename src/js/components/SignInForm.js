@@ -26,8 +26,12 @@ class SignInForm extends Component {
     }
 
     checkAuthorizationAndRedirect() {
-        if (this.props.isAuthorized) {
-            this.props.history.push('/projects');
+        if (this.props.isAuthorized && this.props.account && this.props.account.role) {
+            if (this.props.account.role.code === 'ADMIN') {
+                this.props.history.push('/manageAccounts');
+            } else {
+                this.props.history.push('/projects');
+            }
         }
     }
 
@@ -96,7 +100,8 @@ class SignInForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    isAuthorized: state.isAuthorized
+    isAuthorized: state.isAuthorized,
+    account: state.account
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

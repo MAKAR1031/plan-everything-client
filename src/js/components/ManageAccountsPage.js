@@ -1,0 +1,103 @@
+import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
+import {loadAccounts, loadRoles, select, lock, unlock, changeRole} from '../actions/manage_account_actions';
+
+class ManageAccountsPage extends Component {
+
+    componentDidMount() {
+        this.onComponentUpdate();
+    }
+
+    componentDidUpdate() {
+        this.onComponentUpdate();
+    }
+
+    onComponentUpdate() {
+        if (!this.props.isAuthorized) {
+            this.props.history.push('/');
+        }
+        if (!this.props.accounts) {
+            this.props.loadAccounts();
+        }
+    }
+
+    accounts = () => this.props.accounts ? this.props.accounts._embedded.accounts : null;
+
+    onSelect = (account) => this.props.select(account);
+
+    onLock = () => this.props.lock(this.props.selected);
+
+    onUnlock = () => this.props.unlock(this.props.selected);
+
+    checkLink = (name) => this.props.selected && this.props.selected._links[name];
+
+    render() {
+        const accountList = this.accounts() ? this.accounts().map(account => (
+            <Card className='selectable-item mb-3' key={account.login} onClick={() => this.onSelect(account)}>
+                <CardBody>
+                    <Row>
+                        <Col sm={4}>{account.fullName}</Col>
+                        <Col sm={4}>{account.role.name}</Col>
+                        <Col sm={4}>{account.blocked ? 'blocked' : 'active'}</Col>
+                    </Row>
+                </CardBody>
+            </Card>
+        )) : <Container>Loading...</Container>;
+
+        const lockAction = this.checkLink('lock') ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onLock}>Lock</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        const unlockAction = this.checkLink('unlock') ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onUnlock}>Unlock</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        const changeRoleAction = this.checkLink('changeRole') ? (
+            <Row>
+                <Col>
+                    <Button color='primary'>Change role</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        return (
+            <Container fluid={true}>
+                <Row>
+                    <Col sm={10}>
+                        <h2 className='text-center mt-2 mb-3'>Manage accounts</h2>
+                        {accountList}
+                    </Col>
+                    <Col sm={2} className='right-menu'>
+                        {lockAction}
+                        {unlockAction}
+                        {changeRoleAction}
+                    </Col>
+                </Row>
+            </Container>
+        );
+    }
+}
+
+const mapStateToProps = state => ({
+    isAuthorized: state.isAuthorized,
+    accounts: state.accountManagement.accounts,
+    selected: state.accountManagement.selectedAccount,
+    roles: state.accountManagement.roles
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators(
+    {loadAccounts, loadRoles, select, lock, unlock, changeRole},
+    dispatch
+);
+
+export default connect(mapStateToProps, mapDispatchToProps)(ManageAccountsPage);

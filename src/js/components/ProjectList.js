@@ -51,7 +51,7 @@ class ProjectList extends Component {
 
     render() {
         const projectList = this.props.projectData ? this.projects().map((project) => (
-            <div className='card project mb-3' key={project.name} onClick={() => this.onSelect(project)}>
+            <div className='card selectable-item mb-3' key={project.name} onClick={() => this.onSelect(project)}>
                 <div className='card-body'>
                     <div className='row'>
                         <div className="col-3"><strong>{project.name}</strong></div>

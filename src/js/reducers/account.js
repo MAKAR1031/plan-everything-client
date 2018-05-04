@@ -5,7 +5,7 @@ export default function account(state = initialState, action) {
         case 'CURRENT_ACCOUNT_LOADED':
             return action.data;
         case 'LOGOUT':
-            return null;
+            return initialState;
         default:
             return state;
     }
