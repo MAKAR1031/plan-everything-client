@@ -19,7 +19,7 @@ class ProjectList extends Component {
         if (!this.props.isAuthorized) {
             this.props.history.push('/');
         }
-        if (this.props.projects == null) {
+        if (this.props.projectData == null) {
             this.props.load();
         }
     }
