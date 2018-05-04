@@ -61,7 +61,7 @@ export const logout = () => dispatch => {
 };
 
 export const loadAccount = () => dispatch => {
-    baseUrlApi.get('/accounts/me', authHeader()).then(res => {
+    baseUrlApi.get('/accounts/me?projection=withRole', authHeader()).then(res => {
         dispatch({
             type: 'CURRENT_ACCOUNT_LOADED',
             data: res.data

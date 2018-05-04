@@ -1,4 +1,5 @@
 import {api, baseUrlApi, authHeader} from '../api'
+import linkUtils from '../util/link-utils';
 
 export const load = () => dispatch => {
     baseUrlApi.get('/projects/search/my', authHeader()).then(res => {
@@ -12,7 +13,8 @@ export const load = () => dispatch => {
 };
 
 export const getAuthor = (project) => dispatch => {
-    api.get(project._links.author.href, authHeader()).then(res => {
+    const url = linkUtils.linkUrl(project._links.author);
+    api.get(url, authHeader()).then(res => {
         dispatch({
             type: 'AUTHOR_LOADED',
             project,
@@ -24,7 +26,8 @@ export const getAuthor = (project) => dispatch => {
 };
 
 export const getCurrentMember = (project) => dispatch => {
-    api.get(project._links.currentMember.href.replace(/{\?.+}/g, '') + '?projection=full', authHeader()).then(res => {
+    const url = linkUtils.linkUrlWithProjection(project._links.currentMember, 'full');
+    api.get(url, authHeader()).then(res => {
         dispatch({
             type: 'MEMBER_LOADED',
             project,
