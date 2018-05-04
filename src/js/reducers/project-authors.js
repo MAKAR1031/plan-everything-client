@@ -7,6 +7,8 @@ export default function projectsAuthors(state = initialState, action) {
                 ...state,
                 [action.project]: action.author
             };
+        case 'LOGOUT':
+            return initialState;
         default:
             return state;
     }

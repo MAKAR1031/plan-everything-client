@@ -7,6 +7,8 @@ export default function currentProjectMembers(state = initialState, action) {
                 ...state,
                 [action.project]: action.member
             };
+        case 'LOGOUT':
+            return initialState;
         default:
             return state;
     }
