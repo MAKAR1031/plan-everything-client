@@ -2,10 +2,14 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import ChangeAccountRoleDialog from './ChangeAccountRoleDialog';
-import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
+import {Button, Card, CardBody, Col, Container, Input, Row} from 'reactstrap';
 import {loadAccounts, select, lock, unlock, openChangeRoleDialog} from '../actions/manage_account_actions';
 
 class ManageAccountsPage extends Component {
+
+    state = {
+        searchQuery: ''
+    };
 
     componentDidMount() {
         this.onComponentUpdate();
@@ -24,9 +28,18 @@ class ManageAccountsPage extends Component {
         }
     }
 
-    accounts = () => this.props.accounts ? this.props.accounts._embedded.accounts : null;
+    accounts = () => this.props.accounts ? (
+        this.state.searchQuery ?
+            this.props.accounts._embedded.accounts.filter(a =>
+                a.fullName.includes(this.state.searchQuery) ||
+                a.email.includes(this.state.searchQuery) ||
+                a.login.includes(this.state.searchQuery)) :
+            this.props.accounts._embedded.accounts
+    ) : null;
 
     onSelect = (account) => this.props.select(account);
+
+    onSearch = e => this.setState({searchQuery: e.target.value});
 
     onLock = () => this.props.lock(this.props.selected);
 
@@ -78,6 +91,11 @@ class ManageAccountsPage extends Component {
                 <Row>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>Manage accounts</h2>
+                        <Input
+                            className='mb-4'
+                            placeholder='Search account...'
+                            value={this.state.searchQuery}
+                            onChange={this.onSearch}/>
                         {accountList}
                     </Col>
                     <Col sm={2} className='right-menu'>
