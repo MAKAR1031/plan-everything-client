@@ -16,7 +16,14 @@ export const loadAccounts = () => dispatch => {
 };
 
 export const loadRoles = () => dispatch => {
-
+    baseUrlApi.get('/accountRoles', authHeader()).then(res => {
+        dispatch({
+            type: 'ACCOUNT_ROLES_LOADED',
+            roles: res.data
+        });
+    }).catch(reason => {
+        console.log('Error while loading account roles: ', reason.response);
+    });
 };
 
 export const select = (account) => dispatch => {
@@ -52,6 +59,31 @@ export const unlock = (account) => dispatch => {
     });
 };
 
-export const changeRole = (account, role) => dispatch => {
+export const openChangeRoleDialog = () => dispatch => {
+    dispatch({
+        type: 'ACCOUNT_CHANGE_ROLE_DIALOG_OPENED'
+    });
+};
 
+export const closeChangeRoleDialog = () => dispatch => {
+    dispatch({
+        type: 'ACCOUNT_CHANGE_ROLE_DIALOG_CLOSED'
+    });
+};
+
+export const changeRole = (account, role) => dispatch => {
+    const url = linkUtils.linkUrl(account._links.self);
+    baseUrlApi.patch(url, {role}, authHeader()).then(res => {
+        const selfUrl = linkUtils.linkUrlWithProjection(res.data._links.self, 'withRole');
+        baseUrlApi.get(selfUrl, authHeader()).then(res => {
+            alertify.success(`Role changed to: ${res.data.role.name}`);
+            dispatch({
+                type: 'ACCOUNT_UPDATED',
+                account: res.data
+            });
+            dispatch({
+                type: 'ACCOUNT_CHANGE_ROLE_DIALOG_CLOSED'
+            });
+        })
+    });
 };

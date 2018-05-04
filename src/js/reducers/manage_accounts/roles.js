@@ -7,6 +7,6 @@ export default function roles(state = initialState, action) {
         case 'LOGOUT':
             return initialState;
         default:
-            return initialState;
+            return state;
     }
 }

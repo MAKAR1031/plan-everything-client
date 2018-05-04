@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import ChangeAccountRoleDialog from './ChangeAccountRoleDialog';
 import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
-import {loadAccounts, loadRoles, select, lock, unlock, changeRole} from '../actions/manage_account_actions';
+import {loadAccounts, select, lock, unlock, openChangeRoleDialog} from '../actions/manage_account_actions';
 
 class ManageAccountsPage extends Component {
 
@@ -30,6 +31,8 @@ class ManageAccountsPage extends Component {
     onLock = () => this.props.lock(this.props.selected);
 
     onUnlock = () => this.props.unlock(this.props.selected);
+
+    onChangeRole = () => this.props.openChangeRoleDialog();
 
     checkLink = (name) => this.props.selected && this.props.selected._links[name];
 
@@ -65,7 +68,7 @@ class ManageAccountsPage extends Component {
         const changeRoleAction = this.checkLink('changeRole') ? (
             <Row>
                 <Col>
-                    <Button color='primary'>Change role</Button>
+                    <Button color='primary' onClick={this.onChangeRole}>Change role</Button>
                 </Col>
             </Row>
         ) : '';
@@ -83,6 +86,7 @@ class ManageAccountsPage extends Component {
                         {changeRoleAction}
                     </Col>
                 </Row>
+                <ChangeAccountRoleDialog/>
             </Container>
         );
     }
@@ -96,7 +100,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {loadAccounts, loadRoles, select, lock, unlock, changeRole},
+    {loadAccounts, select, lock, unlock, openChangeRoleDialog},
     dispatch
 );
 

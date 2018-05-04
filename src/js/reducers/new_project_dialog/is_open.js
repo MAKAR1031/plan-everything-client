@@ -1,6 +1,6 @@
 const initialState = false;
 
-export default function isOpened(state = initialState, action) {
+export default function isOpen(state = initialState, action) {
     switch (action.type) {
         case 'NEW_PROJECT_DIALOG_OPENED':
             return true;

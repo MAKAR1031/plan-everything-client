@@ -63,7 +63,7 @@ class NewProjectDialog extends Component {
         ) : '';
 
         return (
-            <Modal isOpen={this.props.isOpened} fade={true} size='lg'>
+            <Modal isOpen={this.props.isOpen} fade={true} size='lg'>
                 <ModalHeader toggle={this.onClose}>New project</ModalHeader>
                 <ModalBody>
                     {errorBlock}
@@ -119,7 +119,7 @@ class NewProjectDialog extends Component {
 }
 
 const mapStateToProps = state => ({
-    isOpened: state.newProjectDialog.isOpened,
+    isOpen: state.newProjectDialog.isOpen,
     isLoading: state.newProjectDialog.isLoading,
     error: state.newProjectDialog.error,
     account: state.account

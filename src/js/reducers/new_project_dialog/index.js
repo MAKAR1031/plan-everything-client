@@ -1,11 +1,11 @@
 import {combineReducers} from 'redux'
 
-import isOpened from './is_opened';
+import isOpen from './is_open';
 import isLoading from './is_loading';
 import error from './error';
 
 export default combineReducers({
-    isOpened,
+    isOpen,
     isLoading,
     error
 })
