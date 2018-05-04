@@ -30,7 +30,10 @@ export const signIn = (username, password) => dispatch => {
             })
         });
     }).catch(reason => {
-        console.log(reason);
+        dispatch({
+            type: 'AUTHORIZATION_FAILED',
+            error: reason.response.data.error_description
+        });
     })
 };
 

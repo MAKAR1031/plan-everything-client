@@ -1,6 +1,7 @@
 import {combineReducers} from 'redux'
 
 import isAuthorized from './authorization'
+import authError from './auth_error'
 import signUpStatus from './sign_up';
 import accountManagement from './manage_accounts';
 import account from './account';
@@ -12,6 +13,7 @@ import newProjectDialog from './new_project_dialog';
 
 export default combineReducers({
     isAuthorized,
+    authError,
     signUpStatus,
     accountManagement,
     account,

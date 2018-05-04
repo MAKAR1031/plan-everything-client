@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {signIn} from "../actions/auth_actions";
 import {Link} from 'react-router-dom'
-import {Container, Row, Col, FormGroup, FormFeedback, Label, Input} from 'reactstrap';
+import {Container, Row, Col, FormGroup, FormFeedback, Label, Input, UncontrolledAlert} from 'reactstrap';
 
 class SignInForm extends Component {
     state = {
@@ -55,10 +55,17 @@ class SignInForm extends Component {
     };
 
     render() {
+        const errorBlock = this.props.error ? (
+            <UncontrolledAlert color='danger'>
+                {this.props.error}
+            </UncontrolledAlert>
+        ) : '';
+
         return (
             <Container>
                 <h2 className='text-center mt-2 mb-3'>Sign In</h2>
                 <Container className='w-50 border p-3'>
+                    {errorBlock}
                     <FormGroup row>
                         <Label sm={2} for="username">Username</Label>
                         <Col sm={10}>
@@ -101,6 +108,7 @@ class SignInForm extends Component {
 
 const mapStateToProps = state => ({
     isAuthorized: state.isAuthorized,
+    error: state.authError,
     account: state.account
 });
 
