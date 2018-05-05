@@ -7,6 +7,11 @@
     font-size: 1.2em;
 }
 
+.left-menu>.row,
+.right-menu>.row {
+    margin-bottom: 5px;
+}
+
 .selectable-item {
     transition: 0.3s all;
 }
@@ -14,4 +19,8 @@
 .selectable-item:hover {
     cursor: pointer;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+input[type='color'].form-control {
+    padding: 2px 5px;
 }

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Container, Row, Col, Button} from 'reactstrap';
+import {Link} from "react-router-dom";
 
 class ProjectPage extends Component {
 
@@ -42,6 +43,7 @@ class ProjectPage extends Component {
                     </Col>
                     <Col sm={2} className='right-menu'>
                         {manageTagsAction}
+                        <Link to='projects'>Go back</Link>
                     </Col>
                 </Row>
             </Container>
