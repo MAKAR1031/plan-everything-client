@@ -4,6 +4,18 @@ export default function tags(state = initialState, action) {
     switch (action.type) {
         case 'TAGS_LOADED':
             return action.tags;
+        case 'TAG_CREATED':
+            return {
+                ...state,
+                ...{
+                    _embedded: {
+                        tags: [
+                            ...state._embedded.tags,
+                            action.tag
+                        ]
+                    }
+                }
+            };
         case 'TAGS_UPDATED':
             return {
                 ...state,

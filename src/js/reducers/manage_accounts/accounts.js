@@ -5,19 +5,12 @@ export default function accounts(state = initialState, action) {
         case 'ACCOUNTS_LOADED':
             return action.accounts;
         case 'ACCOUNT_UPDATED':
-            const accounts = state._embedded.accounts.map(account => {
-                if (account.login === action.account.login) {
-                    return action.account;
-                } else {
-                    return account;
-                }
-            });
-
             return {
                 ...state,
                 ...{
                     _embedded: {
-                        accounts
+                        accounts: state._embedded.accounts.map(a =>
+                            a.login === action.account.login ? action.account : a)
                     }
                 }
             };

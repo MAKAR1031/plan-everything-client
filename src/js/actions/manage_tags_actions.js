@@ -50,7 +50,7 @@ export const createTag = (project, tag) => dispatch => {
     baseUrlApi.post('/tags', data, authHeader()).then(res => {
         alertify.success('Tag created');
         dispatch({
-            type: 'TAGS_UPDATED',
+            type: 'TAG_CREATED',
             tag: res.data
         });
         dispatch({
