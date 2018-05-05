@@ -6,6 +6,7 @@ import SignUpForm from '../components/SignUpForm';
 import ManageAccountsPage from '../components/ManageAccountsPage';
 import ProjectList from '../components/ProjectList';
 import ProjectPage from '../components/ProjectPage';
+import ManageTagsPage from '../components/ManageTagsPage';
 
 class App extends Component {
     render() {
@@ -18,6 +19,7 @@ class App extends Component {
                     <Route path='/manageAccounts' component={ManageAccountsPage}/>
                     <Route path='/projects' component={ProjectList}/>
                     <Route path='/project' component={ProjectPage}/>
+                    <Route path='/manageTags' component={ManageTagsPage}/>
                 </div>
             </BrowserRouter>
         );

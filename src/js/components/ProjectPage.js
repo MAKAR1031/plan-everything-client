@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Container, Row, Col} from 'reactstrap';
+import {Container, Row, Col, Button} from 'reactstrap';
 
 class ProjectPage extends Component {
 
@@ -19,16 +19,30 @@ class ProjectPage extends Component {
         }
     }
 
+    onManageTags = () => this.props.history.push('/manageTags');
+
     projectName = () => this.props.project ? this.props.project.name : '';
 
+    canManageTags = () => this.props.project ? this.props.project._links.manageTags != null : false;
+
     render() {
+        const manageTagsAction = this.canManageTags() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onManageTags}>Manage tags</Button>
+                </Col>
+            </Row>
+        ) : '';
+
         return (
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
                     </Col>
-                    <Col sm={2} className='right-menu'/>
+                    <Col sm={2} className='right-menu'>
+                        {manageTagsAction}
+                    </Col>
                 </Row>
             </Container>
         );
