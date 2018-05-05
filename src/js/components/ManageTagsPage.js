@@ -42,8 +42,13 @@ class ManageTagsPage extends Component {
             <Card className='selectable-item mb-3' key={tag.name} onClick={() => this.onSelect(tag)}>
                 <CardBody>
                     <Row>
-                        <Col>{tag.name}</Col>
-                        <Col>{tag.color}</Col>
+                        <Col sm={3}>{tag.name}</Col>
+                        <Col sm={3}>
+                            <Row>
+                                <Col style={{backgroundColor: '#' + tag.color}}/>
+                                <Col>{tag.color}</Col>
+                            </Row>
+                        </Col>
                     </Row>
                 </CardBody>
             </Card>
