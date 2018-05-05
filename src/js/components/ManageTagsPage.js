@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Col, Container, Row, Button, Card, CardBody} from 'reactstrap';
+import {Col, Container, Row, Button, Card, CardBody, Input} from 'reactstrap';
 import {Link} from "react-router-dom";
 import {load, select, openNewDialog, openEditDialog, deleteTag} from "../actions/manage_tags_actions";
 import TagDialog from './TagDialog';
 
 class ManageTagsPage extends Component {
+
+    state = {
+        search: ''
+    };
 
     componentDidUpdate() {
         this.onComponentUpdate();
@@ -27,7 +31,13 @@ class ManageTagsPage extends Component {
 
     projectName = () => this.props.project ? this.props.project.name : 'Loading...';
 
-    tagsList = () => this.props.tags ? this.props.tags._embedded.tags : null;
+    tagsList = () => this.props.tags ? (
+        this.state.search ?
+            this.props.tags._embedded.tags.filter(t => t.name.includes(this.state.search)) :
+            this.props.tags._embedded.tags
+    ) : null;
+
+    onSearch = e => this.setState({search: e.target.value});
 
     onSelect = (tag) => this.props.select(tag);
 
@@ -77,6 +87,11 @@ class ManageTagsPage extends Component {
                 <Row>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>Manage tags</h2>
+                        <Input
+                            className='mb-4'
+                            placeholder='Search tag...'
+                            value={this.state.search}
+                            onChange={this.onSearch}/>
                         {list}
                     </Col>
                     <Col sm={2} className='right-menu'>

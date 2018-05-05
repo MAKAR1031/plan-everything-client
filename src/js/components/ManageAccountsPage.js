@@ -8,7 +8,7 @@ import {loadAccounts, select, lock, unlock, openChangeRoleDialog} from '../actio
 class ManageAccountsPage extends Component {
 
     state = {
-        searchQuery: ''
+        search: ''
     };
 
     componentDidMount() {
@@ -29,17 +29,17 @@ class ManageAccountsPage extends Component {
     }
 
     accounts = () => this.props.accounts ? (
-        this.state.searchQuery ?
+        this.state.search ?
             this.props.accounts._embedded.accounts.filter(a =>
-                a.fullName.includes(this.state.searchQuery) ||
-                a.email.includes(this.state.searchQuery) ||
-                a.login.includes(this.state.searchQuery)) :
+                a.fullName.includes(this.state.search) ||
+                a.email.includes(this.state.search) ||
+                a.login.includes(this.state.search)) :
             this.props.accounts._embedded.accounts
     ) : null;
 
     onSelect = (account) => this.props.select(account);
 
-    onSearch = e => this.setState({searchQuery: e.target.value});
+    onSearch = e => this.setState({search: e.target.value});
 
     onLock = () => this.props.lock(this.props.selected);
 
@@ -94,7 +94,7 @@ class ManageAccountsPage extends Component {
                         <Input
                             className='mb-4'
                             placeholder='Search account...'
-                            value={this.state.searchQuery}
+                            value={this.state.search}
                             onChange={this.onSearch}/>
                         {accountList}
                     </Col>
