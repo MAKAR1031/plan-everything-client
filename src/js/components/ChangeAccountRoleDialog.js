@@ -36,14 +36,6 @@ class ChangeAccountRoleDialog extends Component {
     checkAndLoadRoles() {
         if (!this.props.roles) {
             this.props.loadRoles();
-        } else if (!this.state.selectedRole.value && this.props.selected) {
-            this.rolesList().map(role => {
-                if (this.props.selected.role.code === role.code) {
-                    this.setState(
-                        {selectedRole: {value: role._links.self.href, isInvalid: false}}
-                    );
-                }
-            });
         }
     }
 
@@ -56,7 +48,19 @@ class ChangeAccountRoleDialog extends Component {
 
     onRoleSelect = e => this.setState({selectedRole: {value: e.target.value, isInvalid: false}});
 
-    onChangeRole = () => this.props.changeRole(this.props.selected, this.state.selectedRole.value);
+    onChangeRole = () => {
+        let valid = true;
+        if (!this.state.selectedRole.value) {
+            this.setState({selectedRole: {isInvalid: true}});
+            valid = false;
+        }
+        if (valid) {
+            this.props.changeRole(this.props.selected, this.state.selectedRole.value);
+            this.resetState();
+        }
+    };
+
+    accountFullName = () => this.props.selected ? this.props.selected.fullName : '';
 
     resetState = () => this.setState(this.initialState);
 
@@ -68,6 +72,7 @@ class ChangeAccountRoleDialog extends Component {
                        value={this.state.selectedRole.value}
                        invalid={this.state.selectedRole.isInvalid}
                        onChange={this.onRoleSelect}>
+                    <option/>
                     {this.rolesList().map(role => (
                         <option value={role._links.self.href} key={role.code}>{role.name}</option>
                     ))}
@@ -82,10 +87,7 @@ class ChangeAccountRoleDialog extends Component {
                 <ModalBody>
                     <Row>
                         <Col>
-                            <p>
-                                Change role for
-                                account: <strong>{this.props.selected ? this.props.selected.fullName : ''}</strong>
-                            </p>
+                            Change role for account: <strong>{this.accountFullName()}</strong>
                         </Col>
                     </Row>
                     <Row>
