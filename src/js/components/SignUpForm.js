@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {signUp, resetSignUpStatus} from '../actions/auth_actions';
 import alertify from 'alertify.js';
 import {Container, Row, Col, FormGroup, Label, Input, FormFeedback, Button} from 'reactstrap';
+import {Link} from "react-router-dom";
 
 alertify.logPosition("bottom right");
 
@@ -92,7 +93,13 @@ class SignUpForm extends Component {
         return (
             <Container fluid={true}>
                 <Row>
-                    <Col sm={2} className='left-menu'/>
+                    <Col sm={2} className='left-menu'>
+                        <Row>
+                            <Col>
+                                <Link to='/'>Go back</Link>
+                            </Col>
+                        </Row>
+                    </Col>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>Sign Up</h2>
                         <Container className='border p-3 w-50'>
