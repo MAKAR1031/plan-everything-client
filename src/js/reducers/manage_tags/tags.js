@@ -35,6 +35,7 @@ export default function tags(state = initialState, action) {
                     }
                 }
             };
+        case 'PROJECT_SELECTED':
         case 'LOGOUT':
             return initialState;
         default:
