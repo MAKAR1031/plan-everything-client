@@ -7,6 +7,7 @@ import ManageAccountsPage from '../components/ManageAccountsPage';
 import ProjectList from '../components/ProjectList';
 import ProjectPage from '../components/ProjectPage';
 import ManageTagsPage from '../components/ManageTagsPage';
+import ManageMembersPage from '../components/ManageMembersPage';
 
 class App extends Component {
     render() {
@@ -20,6 +21,7 @@ class App extends Component {
                     <Route path='/projects' component={ProjectList}/>
                     <Route path='/project' component={ProjectPage}/>
                     <Route path='/manageTags' component={ManageTagsPage}/>
+                    <Route path='/manageMembers' component={ManageMembersPage}/>
                 </div>
             </BrowserRouter>
         );

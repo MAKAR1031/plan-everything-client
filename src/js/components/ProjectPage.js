@@ -20,11 +20,15 @@ class ProjectPage extends Component {
         }
     }
 
-    onManageTags = () => this.props.history.push('/manageTags');
-
     projectName = () => this.props.project ? this.props.project.name : '';
 
+    onManageTags = () => this.props.history.push('/manageTags');
+
+    onManageMembers = () => this.props.history.push('/manageMembers');
+
     canManageTags = () => this.props.project ? this.props.project._links.manageTags != null : false;
+
+    canManageMembers = () => this.props.project ? this.props.project._links.manageMembers != null : false;
 
     render() {
         const manageTagsAction = this.canManageTags() ? (
@@ -35,6 +39,15 @@ class ProjectPage extends Component {
             </Row>
         ) : '';
 
+        const manageMembersAction = this.canManageMembers() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onManageMembers}>Manage members</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+
         return (
             <Container fluid={true}>
                 <Row>
@@ -43,6 +56,7 @@ class ProjectPage extends Component {
                     </Col>
                     <Col sm={2} className='right-menu'>
                         {manageTagsAction}
+                        {manageMembersAction}
                         <Link to='projects'>Go back</Link>
                     </Col>
                 </Row>
