@@ -23,3 +23,15 @@ export const select = (member) => dispatch => {
         member
     });
 };
+
+export const openAddMembersDialog = () => dispatch => {
+    dispatch({
+        type: 'ADD_MEMBERS_DIALOG_OPENED'
+    });
+};
+
+export const closeAddMembersDialog = () => dispatch => {
+    dispatch({
+        type: 'ADD_MEMBERS_DIALOG_CLOSED'
+    });
+};

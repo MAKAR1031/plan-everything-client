@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Container, Row, Col, Card, CardBody} from "reactstrap";
+import {Container, Row, Col, Card, CardBody, Button} from "reactstrap";
 import {Link} from "react-router-dom";
-import {load, select} from "../actions/manage_members_actions";
+import {load, select, openAddMembersDialog} from "../actions/manage_members_actions";
+import AddMembersDialog from './AddMembersDialog';
 
 class ManageMembersPage extends Component {
     state = {
@@ -33,6 +34,8 @@ class ManageMembersPage extends Component {
 
     onSelect = (member) => this.props.select(member);
 
+    onAdd = () => this.props.openAddMembersDialog();
+
     render() {
         const list = this.membersList() ? this.membersList().map(member => (
             <Card className='selectable-item mb-3' key={member._links.self.href} onClick={() => this.onSelect(member)}>
@@ -53,9 +56,15 @@ class ManageMembersPage extends Component {
                         {list}
                     </Col>
                     <Col sm={2} className='right-menu'>
+                        <Row>
+                            <Col>
+                                <Button color='primary' onClick={this.onAdd}>Add member</Button>
+                            </Col>
+                        </Row>
                         <Link to='projects'>Go back</Link>
                     </Col>
                 </Row>
+                <AddMembersDialog/>
             </Container>
         );
     }
@@ -68,7 +77,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {load, select},
+    {load, select, openAddMembersDialog},
     dispatch
 );
 
