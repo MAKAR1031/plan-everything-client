@@ -33,7 +33,7 @@ class Header extends Component {
             </li>
         </ul>) : '';
         return (
-            <nav className="navbar navbar-dark bg-dark justify-content-between" style={{height: '10%'}}>
+            <nav className="navbar navbar-dark bg-dark justify-content-between header">
                 <a className="navbar-brand" href="#"><h2>Plan everything</h2></a>
                 {userInfo}
             </nav>

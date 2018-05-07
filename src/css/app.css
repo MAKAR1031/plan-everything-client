@@ -1,6 +1,10 @@
+.header {
+    height: 60px;
+}
+
 .left-menu,
 .right-menu {
-    height: 90%;
+    height: calc(100% - 60px);
     background-color: #484e54;
     color: white;
     text-align: center;
