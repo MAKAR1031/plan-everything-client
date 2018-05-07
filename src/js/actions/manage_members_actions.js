@@ -35,3 +35,16 @@ export const closeAddMembersDialog = () => dispatch => {
         type: 'ADD_MEMBERS_DIALOG_CLOSED'
     });
 };
+
+export const loadNonProjectAccounts = (project) => dispatch => {
+    const url = '/accounts/search/nonInProject?project=' + linkUtils.linkUrl(project._links.self);
+    baseUrlApi.get(url, authHeader()).then(res => {
+        dispatch({
+            type: 'ACCOUNTS_TO_ADD_MEMBERS_LOADED',
+            accounts: res.data
+        });
+    }).catch(reason => {
+        alertify.error('Error while loadings accounts to add members');
+        console.log('Error while loadings accounts to add members: ', reason.response);
+    });
+};
