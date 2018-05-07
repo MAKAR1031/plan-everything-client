@@ -12,7 +12,8 @@ class RedirectToSignInComponent extends Component {
     }
 
     checkAndRedirect = () => {
-        if (!this.props.isAuthorized && this.props.history.location.pathname !== '/') {
+        const pathname = this.props.history.location.pathname;
+        if (!this.props.isAuthorized && (pathname !== '/' && pathname !== '/signup')) {
             this.props.history.push('/');
         }
     };
