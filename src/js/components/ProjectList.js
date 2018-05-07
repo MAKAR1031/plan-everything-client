@@ -8,17 +8,14 @@ import {open as openDialog} from '../actions/new_project_dialog_actions';
 class ProjectList extends Component {
 
     componentDidUpdate() {
-        this.onComponentUpdate();
+        this.checkAndLoadProjects();
     }
 
     componentDidMount() {
-        this.onComponentUpdate();
+        this.checkAndLoadProjects();
     }
 
-    onComponentUpdate() {
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/');
-        }
+    checkAndLoadProjects() {
         if (this.props.projectData == null) {
             this.props.load();
         }
@@ -83,7 +80,6 @@ class ProjectList extends Component {
 }
 
 const mapStateToProps = state => ({
-    isAuthorized: state.isAuthorized,
     projectData: state.projects,
     projectAuthors: state.projectAuthors,
     currentProjectMembers: state.currentProjectMembers

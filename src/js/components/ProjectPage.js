@@ -6,20 +6,6 @@ import {Link} from "react-router-dom";
 
 class ProjectPage extends Component {
 
-    componentDidMount() {
-        this.checkAuthAndRedirect();
-    }
-
-    componentDidUpdate() {
-        this.checkAuthAndRedirect();
-    }
-
-    checkAuthAndRedirect() {
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/');
-        }
-    }
-
     projectName = () => this.props.project ? this.props.project.name : '';
 
     onManageTags = () => this.props.history.push('/manageTags');
@@ -66,7 +52,6 @@ class ProjectPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    isAuthorized: state.isAuthorized,
     project: state.currentProject
 });
 

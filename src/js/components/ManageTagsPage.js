@@ -13,17 +13,14 @@ class ManageTagsPage extends Component {
     };
 
     componentDidUpdate() {
-        this.onComponentUpdate();
+        this.checkAndLoadTags();
     }
 
     componentDidMount() {
-        this.onComponentUpdate();
+        this.checkAndLoadTags();
     }
 
-    onComponentUpdate = () => {
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/');
-        }
+    checkAndLoadTags = () => {
         if (!this.props.tags && this.props.project) {
             this.props.load(this.props.project);
         }
@@ -121,7 +118,6 @@ class ManageTagsPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    isAuthorized: state.isAuthorized,
     project: state.currentProject,
     tags: state.tagsManagement.tags,
     selected: state.tagsManagement.selected

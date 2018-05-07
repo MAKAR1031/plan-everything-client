@@ -12,17 +12,14 @@ class ManageAccountsPage extends Component {
     };
 
     componentDidMount() {
-        this.onComponentUpdate();
+        this.checkAndLoadAccounts();
     }
 
     componentDidUpdate() {
-        this.onComponentUpdate();
+        this.checkAndLoadAccounts();
     }
 
-    onComponentUpdate() {
-        if (!this.props.isAuthorized) {
-            this.props.history.push('/');
-        }
+    checkAndLoadAccounts() {
         if (!this.props.accounts) {
             this.props.loadAccounts();
         }
@@ -111,7 +108,6 @@ class ManageAccountsPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    isAuthorized: state.isAuthorized,
     accounts: state.accountManagement.accounts,
     selected: state.accountManagement.selectedAccount,
     roles: state.accountManagement.roles
