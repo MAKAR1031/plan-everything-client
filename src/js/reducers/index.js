@@ -11,6 +11,7 @@ import projectAuthors from './project_authors';
 import currentProjectMembers from './current_project_members';
 import newProjectDialog from './new_project_dialog';
 import tagsManagement from './manage_tags';
+import membersManagement from './manage_members';
 
 export default combineReducers({
     isAuthorized,
@@ -23,5 +24,6 @@ export default combineReducers({
     projectAuthors,
     currentProjectMembers,
     newProjectDialog,
-    tagsManagement
+    tagsManagement,
+    membersManagement
 });
