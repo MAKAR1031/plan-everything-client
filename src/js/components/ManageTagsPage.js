@@ -34,6 +34,8 @@ class ManageTagsPage extends Component {
             this.props.tags._embedded.tags
     ) : null;
 
+    isCurrent = (tag) => this.props.selected ? this.props.selected._links.self.href === tag._links.self.href : false;
+
     onSearch = e => this.setState({search: e.target.value});
 
     onSelect = (tag) => this.props.select(tag);
@@ -46,7 +48,8 @@ class ManageTagsPage extends Component {
 
     render() {
         const list = this.tagsList() ? this.tagsList().map(tag => (
-            <Card className='selectable-item mb-3' key={tag.name} onClick={() => this.onSelect(tag)}>
+            <Card className={'selectable-item mb-3' + (this.isCurrent(tag) ? ' selected' : '')}
+                  key={tag.name} onClick={() => this.onSelect(tag)}>
                 <CardBody>
                     <Row>
                         <Col sm={3}>{tag.name}</Col>

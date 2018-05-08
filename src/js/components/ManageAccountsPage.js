@@ -34,6 +34,9 @@ class ManageAccountsPage extends Component {
             this.props.accounts._embedded.accounts
     ) : null;
 
+    isCurrent = (account) => this.props.selected ?
+        this.props.selected._links.self.href === account._links.self.href : false;
+
     onSelect = (account) => this.props.select(account);
 
     onSearch = e => this.setState({search: e.target.value});
@@ -48,7 +51,8 @@ class ManageAccountsPage extends Component {
 
     render() {
         const accountList = this.accounts() ? this.accounts().map(account => (
-            <Card className='selectable-item mb-3' key={account.login} onClick={() => this.onSelect(account)}>
+            <Card className={'selectable-item mb-3' + (this.isCurrent(account) ? ' selected' : '')}
+                  key={account.login} onClick={() => this.onSelect(account)}>
                 <CardBody>
                     <Row>
                         <Col sm={4}>{account.fullName}</Col>

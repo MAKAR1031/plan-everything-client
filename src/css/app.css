@@ -25,6 +25,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
+.selectable-item.selected {
+    box-shadow: 0 0 10px #afccec;
+    background-color: #bfdeff;
+}
+
 input[type='color'].form-control {
     padding: 2px 5px;
 }

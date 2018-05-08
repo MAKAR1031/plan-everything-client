@@ -32,13 +32,17 @@ class ManageMembersPage extends Component {
             this.props.members._embedded.projectMembers
     ) : null;
 
+    isCurrent = (member) => this.props.selected ?
+        this.props.selected._links.self.href === member._links.self.href : false;
+
     onSelect = (member) => this.props.select(member);
 
     onAdd = () => this.props.openAddMembersDialog();
 
     render() {
         const list = this.membersList() ? this.membersList().map(member => (
-            <Card className='selectable-item mb-3' key={member._links.self.href} onClick={() => this.onSelect(member)}>
+            <Card className={'selectable-item mb-3' + (this.isCurrent(member) ? ' selected' : '')}
+                  key={member._links.self.href} onClick={() => this.onSelect(member)}>
                 <CardBody>
                     <Row>
                         <Col>{member.account.fullName}</Col>
