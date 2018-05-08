@@ -8,15 +8,33 @@ class ProjectPage extends Component {
 
     projectName = () => this.props.project ? this.props.project.name : '';
 
+    projectDescription = () => this.props.project ? this.props.project.description : '';
+
+    projectDate = () => this.props.project ? this.props.project.createDate : '';
+
+    projectAuthor = () => this.props.project ? this.props.projectAuthors[this.props.project].fullName : '';
+
+    onNewTask = () => this.props.history.push('/newTask');
+
     onManageTags = () => this.props.history.push('/manageTags');
 
     onManageMembers = () => this.props.history.push('/manageMembers');
+
+    canManageTasks = () => this.props.project ? this.props.project._links.manageTasks != null : false;
 
     canManageTags = () => this.props.project ? this.props.project._links.manageTags != null : false;
 
     canManageMembers = () => this.props.project ? this.props.project._links.manageMembers != null : false;
 
     render() {
+        const newTaskAction = this.canManageTasks() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onNewTask}>New task</Button>
+                </Col>
+            </Row>
+        ) : '';
+
         const manageTagsAction = this.canManageTags() ? (
             <Row>
                 <Col>
@@ -39,11 +57,23 @@ class ProjectPage extends Component {
                 <Row>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
+                        <h5 className='mt-2 mb-3'>{this.projectDescription()}</h5>
                     </Col>
                     <Col sm={2} className='right-menu'>
+                        <Row>
+                            <Col>{this.projectDate()}</Col>
+                        </Row>
+                        <Row>
+                            <Col>{this.projectAuthor()}</Col>
+                        </Row>
+                        {newTaskAction}
                         {manageTagsAction}
                         {manageMembersAction}
-                        <Link to='projects'>Go back</Link>
+                        <Row>
+                            <Col>
+                                <Link to='projects'>Go back</Link>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
             </Container>
@@ -52,7 +82,8 @@ class ProjectPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    project: state.currentProject
+    project: state.currentProject,
+    projectAuthors: state.projectAuthors,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
