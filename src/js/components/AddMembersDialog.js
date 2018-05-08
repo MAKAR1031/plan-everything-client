@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Col, Container, Modal, ModalBody, ModalFooter, ModalHeader, Row} from "reactstrap";
-import {loadNonProjectAccounts, closeAddMembersDialog} from "../actions/manage_members_actions";
+import {Button, Container, Modal, ModalBody, ModalFooter, ModalHeader} from "reactstrap";
+import {loadNonProjectAccounts, addAccountToProject, closeAddMembersDialog} from "../actions/manage_members_actions";
+import MemberCheckbox from './MemberCheckbox';
 
 class AddMembersDialog extends Component {
+    componentWillMount = () => {
+        this.newMemberAccounts = new Set();
+    };
 
     componentDidMount() {
         this.checkAndLoadAccounts();
@@ -24,13 +28,23 @@ class AddMembersDialog extends Component {
 
     onClose = () => this.props.close();
 
-    onSave = () => this.props.close();
+    onSave = () => {
+        this.newMemberAccounts.forEach(accountUrl => this.props.addToProject(this.props.project, accountUrl));
+        this.newMemberAccounts.clear();
+        this.props.close();
+    };
+
+    onToggleCheckbox = (accountLink) => {
+        if (this.newMemberAccounts.has(accountLink)) {
+            this.newMemberAccounts.delete(accountLink);
+        }  else {
+            this.newMemberAccounts.add(accountLink);
+        }
+    };
 
     render() {
         const list = this.accountsList() ? this.accountsList().map(a => (
-            <Row>
-                <Col>{a.fullName}</Col>
-            </Row>
+            <MemberCheckbox key={a.login} account={a} onToggleHandler={this.onToggleCheckbox}/>
         )) : (
             <Container>Loading...</Container>
         );
@@ -57,6 +71,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators(
     {
         loadAccounts: loadNonProjectAccounts,
+        addToProject: addAccountToProject,
         close: closeAddMembersDialog
     },
     dispatch

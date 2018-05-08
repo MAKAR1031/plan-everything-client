@@ -48,3 +48,24 @@ export const loadNonProjectAccounts = (project) => dispatch => {
         console.log('Error while loadings accounts to add members: ', reason.response);
     });
 };
+
+export const addAccountToProject = (project, accountUrl) => dispatch => {
+    const data = {
+        project: linkUtils.linkUrl(project._links.self),
+        account: accountUrl
+    };
+    baseUrlApi.post('/members', data, authHeader()).then(res => {
+        const newMemberUrl = linkUtils.linkUrlWithProjection(res.data._links.self, 'full');
+        baseUrlApi.get(newMemberUrl, authHeader()).then(res => {
+            const member = res.data;
+            alertify.success(`${member.account.fullName} added to project members`);
+            dispatch({
+                type: 'MEMBER_ADDED',
+                member
+            })
+        });
+    }).catch(reason => {
+        alertify.error('Error while add member to project');
+        console.log('Error while add member to project: ', reason);
+    });
+};
