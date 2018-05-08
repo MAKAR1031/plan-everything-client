@@ -36,7 +36,7 @@ class ChangeMemberRoleDialog extends Component {
                     initToEdit: true
                 });
             }
-        })
+        });
     };
 
     rolesList = () => this.props.roles ? this.props.roles._embedded.memberRoles : null;

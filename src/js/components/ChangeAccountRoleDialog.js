@@ -1,42 +1,41 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {
-    Modal,
-    ModalHeader,
-    ModalBody,
-    ModalFooter,
-    FormFeedback,
-    Button,
-    FormGroup,
-    Input,
-    Col,
-    Row,
-} from "reactstrap";
-import {loadRoles, changeRole, closeChangeRoleDialog} from '../actions/manage_account_actions';
+import {Button, Col, Container, FormGroup, Input, Modal, ModalBody, ModalFooter, ModalHeader, Row,} from "reactstrap";
+import {changeRole, closeChangeRoleDialog, loadRoles} from '../actions/manage_account_actions';
 
 class ChangeAccountRoleDialog extends Component {
     initialState = {
-        selectedRole: {
+        role: {
             value: '',
-            isInvalid: false
-        }
+        },
+        initToEdit: false
     };
 
     state = this.initialState;
 
-    componentDidMount() {
-        this.checkAndLoadRoles();
-    }
-
     componentDidUpdate() {
-        this.checkAndLoadRoles();
-    }
-
-    checkAndLoadRoles() {
+        if (!this.props.isOpen) {
+            return;
+        }
         if (!this.props.roles) {
             this.props.loadRoles();
         }
+        if (this.props.roles && this.props.selected && !this.state.initToEdit) {
+            this.initDialog();
+        }
+    }
+
+    initDialog() {
+        const currentRoleCode = this.props.selected.role.code;
+        this.rolesList().forEach(role => {
+            if (role.code === currentRoleCode) {
+                this.setState({
+                    role: {value: role._links.self.href},
+                    initToEdit: true
+                });
+            }
+        });
     }
 
     rolesList = () => this.props.roles ? this.props.roles._embedded.accountRoles : null;
@@ -46,60 +45,44 @@ class ChangeAccountRoleDialog extends Component {
         this.resetState();
     };
 
-    onRoleSelect = e => this.setState({selectedRole: {value: e.target.value, isInvalid: false}});
+    onRoleChanged = e => this.setState({role: {value: e.target.value}});
 
-    onChangeRole = () => {
-        let valid = true;
-        if (!this.state.selectedRole.value) {
-            this.setState({selectedRole: {isInvalid: true}});
-            valid = false;
-        }
-        if (valid) {
-            this.props.changeRole(this.props.selected, this.state.selectedRole.value);
-            this.resetState();
-        }
+    onSave = () => {
+        this.props.changeRole(this.props.selected, this.state.role.value);
+        this.resetState();
     };
 
-    accountFullName = () => this.props.selected ? this.props.selected.fullName : '';
+    fullName = () => this.props.selected ? this.props.selected.fullName : '';
 
     resetState = () => this.setState(this.initialState);
 
     render() {
         const roleList = this.rolesList() ? (
-            <Col>
+            <FormGroup>
                 <Input id="accountRole"
                        type="select"
-                       value={this.state.selectedRole.value}
-                       invalid={this.state.selectedRole.isInvalid}
-                       onChange={this.onRoleSelect}>
-                    <option/>
+                       value={this.state.role.value}
+                       onChange={this.onRoleChanged}>
                     {this.rolesList().map(role => (
                         <option value={role._links.self.href} key={role.code}>{role.name}</option>
                     ))}
                 </Input>
-                <FormFeedback>Invalid value</FormFeedback>
-            </Col>
-        ) : <Col>'Loading...'</Col>;
+            </FormGroup>
+        ) : <Container>'Loading...'</Container>;
 
         return (
             <Modal isOpen={this.props.isOpen} fade={true}>
-                <ModalHeader toggle={this.onClose}>Change role</ModalHeader>
+                <ModalHeader toggle={this.onClose}>Change account role</ModalHeader>
                 <ModalBody>
-                    <Row>
+                    <Row className='mb-3'>
                         <Col>
-                            Change role for account: <strong>{this.accountFullName()}</strong>
+                            <p>Change role: <strong>{this.fullName()}</strong></p>
                         </Col>
                     </Row>
-                    <Row>
-                        <Col>
-                            <FormGroup row>
-                                {roleList}
-                            </FormGroup>
-                        </Col>
-                    </Row>
+                    {roleList}
                 </ModalBody>
                 <ModalFooter>
-                    <Button color='primary' onClick={this.onChangeRole}>Save changes</Button>
+                    <Button color='primary' onClick={this.onSave}>Save changes</Button>
                 </ModalFooter>
             </Modal>
         );
