@@ -26,6 +26,16 @@ export default function members(state = initialState, action) {
                     }
                 }
             };
+        case 'MEMBER_UPDATED':
+            return {
+                ...state,
+                ...{
+                    _embedded: {
+                        projectMembers: state._embedded.projectMembers.map(m =>
+                            m._links.self.href === action.member._links.self.href ? action.member : m)
+                    }
+                }
+            };
         case 'PROJECT_SELECTED':
         case 'LOGOUT':
             return initialState;

@@ -83,3 +83,44 @@ export const exclude = (member) => dispatch => {
         console.log('Error while exclude member: ', reason);
     });
 };
+
+export const openChangeRoleDialog = () => dispatch => {
+    dispatch({
+        type: 'CHANGE_MEMBER_ROLE_DIALOG_OPENED'
+    });
+};
+
+export const closeChangeRoleDialog = () => dispatch => {
+    dispatch({
+        type: 'CHANGE_MEMBER_ROLE_DIALOG_CLOSED'
+    });
+};
+
+export const loadRoles = () => dispatch => {
+    baseUrlApi.get('/memberRoles', authHeader()).then(res => {
+        dispatch({
+            type: 'MEMBER_ROLES_LOADED',
+            roles: res.data
+        })
+    }).catch(reason => {
+        alertify.error('Error while loading member roles');
+        console.log('Error while loading member roles: ', reason);
+    });
+};
+
+export const changeRole = (member, role) => dispatch => {
+    const url = linkUtils.linkUrl(member._links.changeRole);
+    baseUrlApi.patch(url, {role}, authHeader()).then(res => {
+        const selfUrl = linkUtils.linkUrlWithProjection(res.data._links.self, 'full');
+        baseUrlApi.get(selfUrl, authHeader()).then(res => {
+            alertify.success(`Role changed to: ${res.data.role.name}`);
+            dispatch({
+                type: 'MEMBER_UPDATED',
+                member: res.data
+            });
+            dispatch({
+                type: 'CHANGE_MEMBER_ROLE_DIALOG_CLOSED'
+            });
+        })
+    });
+};

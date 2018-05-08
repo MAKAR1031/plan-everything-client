@@ -34,7 +34,7 @@ class ProjectList extends Component {
 
     myMemberRole = (project) => {
         if (this.props.currentProjectMembers[project]) {
-            return this.props.currentProjectMembers[project].role;
+            return this.props.currentProjectMembers[project].role.name;
         } else {
             this.props.getCurrentMember(project);
             return 'loading...';
