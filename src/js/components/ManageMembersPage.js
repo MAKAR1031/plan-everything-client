@@ -3,8 +3,9 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Container, Row, Col, Card, CardBody, Button} from "reactstrap";
 import {Link} from "react-router-dom";
-import {load, select, openAddMembersDialog} from "../actions/manage_members_actions";
+import {load, select, openAddMembersDialog, exclude} from "../actions/manage_members_actions";
 import AddMembersDialog from './AddMembersDialog';
+import alertify from 'alertify.js';
 
 class ManageMembersPage extends Component {
     state = {
@@ -35,9 +36,22 @@ class ManageMembersPage extends Component {
     isCurrent = (member) => this.props.selected ?
         this.props.selected._links.self.href === member._links.self.href : false;
 
+    canExlude = () => this.props.selected ? this.props.selected._links.exclude != null : false;
+
     onSelect = (member) => this.props.select(member);
 
     onAdd = () => this.props.openAddMembersDialog();
+
+    onExclude = () => {
+        const member = this.props.selected;
+        alertify
+            .okBtn("Yes")
+            .cancelBtn("No")
+            .confirm(`Exclude ${member.account.fullName} from project?`, () => {
+                this.props.exclude(member);
+            });
+
+    };
 
     render() {
         const list = this.membersList() ? this.membersList().map(member => (
@@ -52,6 +66,14 @@ class ManageMembersPage extends Component {
             </Card>
         )) : (<Container>Loading...</Container>);
 
+        const excludeAction = this.canExlude() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onExclude}>Exclude</Button>
+                </Col>
+            </Row>
+        ) : '';
+
         return (
             <Container fluid={true}>
                 <Row>
@@ -65,7 +87,12 @@ class ManageMembersPage extends Component {
                                 <Button color='primary' onClick={this.onAdd}>Add member</Button>
                             </Col>
                         </Row>
-                        <Link to='projects'>Go back</Link>
+                        {excludeAction}
+                        <Row>
+                            <Col>
+                                <Link to='projects'>Go back</Link>
+                            </Col>
+                        </Row>
                     </Col>
                 </Row>
                 <AddMembersDialog/>
@@ -81,7 +108,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {load, select, openAddMembersDialog},
+    {load, select, openAddMembersDialog, exclude},
     dispatch
 );
 

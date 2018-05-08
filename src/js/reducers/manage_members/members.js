@@ -16,6 +16,16 @@ export default function members(state = initialState, action) {
                     }
                 }
             };
+        case 'MEMBER_EXCLUDED':
+            return {
+                ...state,
+                ...{
+                    _embedded: {
+                        projectMembers: state._embedded.projectMembers.filter(m =>
+                            m._links.self.href !== action.member._links.self.href)
+                    }
+                }
+            };
         case 'PROJECT_SELECTED':
         case 'LOGOUT':
             return initialState;

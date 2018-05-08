@@ -5,6 +5,7 @@ export default function selected(state = initialState, action) {
         case 'MEMBER_SELECTED':
             return action.member;
         case 'PROJECT_SELECTED':
+        case 'MEMBER_EXCLUDED':
         case 'LOGOUT':
             return initialState;
         default:

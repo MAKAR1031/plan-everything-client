@@ -69,3 +69,17 @@ export const addAccountToProject = (project, accountUrl) => dispatch => {
         console.log('Error while add member to project: ', reason);
     });
 };
+
+export const exclude = (member) => dispatch => {
+    const url = linkUtils.linkUrl(member._links.exclude);
+    baseUrlApi.delete(url, authHeader()).then(() => {
+        alertify.success('Member excluded');
+        dispatch({
+            type: 'MEMBER_EXCLUDED',
+            member
+        })
+    }).catch(reason => {
+        alertify.error('Error while exclude member');
+        console.log('Error while exclude member: ', reason);
+    });
+};
