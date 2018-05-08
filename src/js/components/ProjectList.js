@@ -16,12 +16,12 @@ class ProjectList extends Component {
     }
 
     checkAndLoadProjects() {
-        if (this.props.projectData == null) {
+        if (this.props.projects == null) {
             this.props.load();
         }
     }
 
-    projects = () => this.props.projectData['_embedded'].projects;
+    projectsList = () => this.props.projects ? this.props.projects._embedded.projects : null;
 
     author = (project) => {
         if (this.props.projectAuthors[project]) {
@@ -47,7 +47,7 @@ class ProjectList extends Component {
     };
 
     render() {
-        const projectList = this.props.projectData ? this.projects().map((project) => (
+        const projectList = this.projectsList() ? this.projectsList().map((project) => (
             <div className='card selectable-item mb-3' key={project.name} onClick={() => this.onSelect(project)}>
                 <div className='card-body'>
                     <div className='row'>
@@ -80,7 +80,7 @@ class ProjectList extends Component {
 }
 
 const mapStateToProps = state => ({
-    projectData: state.projects,
+    projects: state.projects,
     projectAuthors: state.projectAuthors,
     currentProjectMembers: state.currentProjectMembers
 });

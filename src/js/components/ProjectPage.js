@@ -1,10 +1,25 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Container, Row, Col, Button} from 'reactstrap';
+import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
 import {Link} from "react-router-dom";
+import {loadTasks, select} from "../actions/tasks_actions";
 
 class ProjectPage extends Component {
+
+    componentDidMount() {
+        this.checkAndLoadTasks();
+    }
+
+    componentDidUpdate() {
+        this.checkAndLoadTasks();
+    }
+
+    checkAndLoadTasks = () => {
+        if (!this.props.tasks && this.props.project) {
+            this.props.loadTasks(this.props.project);
+        }
+    };
 
     projectName = () => this.props.project ? this.props.project.name : '';
 
@@ -13,6 +28,12 @@ class ProjectPage extends Component {
     projectDate = () => this.props.project ? this.props.project.createDate : '';
 
     projectAuthor = () => this.props.project ? this.props.projectAuthors[this.props.project].fullName : '';
+
+    tasksList = () => this.props.tasks ? this.props.tasks._embedded.tasks : [];
+
+    isCurrent = (task) => this.props.selected ? this.props.selected._links.self.href === task._links.self.href : false;
+
+    onSelect = (task) => this.props.select(task);
 
     onNewTask = () => this.props.history.push('/newTask');
 
@@ -27,6 +48,17 @@ class ProjectPage extends Component {
     canManageMembers = () => this.props.project ? this.props.project._links.manageMembers != null : false;
 
     render() {
+        const list = this.tasksList().map(task => (
+            <Card className={'selectable-item mb-3' + (this.isCurrent(task) ? ' selected' : '')}
+                  key={task._links.self.href} onClick={() => this.onSelect(task)}>
+                <CardBody>
+                    <Row>
+                        <Col>{task.name}</Col>
+                    </Row>
+                </CardBody>
+            </Card>
+        ));
+
         const newTaskAction = this.canManageTasks() ? (
             <Row>
                 <Col>
@@ -58,6 +90,7 @@ class ProjectPage extends Component {
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
                         <h5 className='mt-2 mb-3'>{this.projectDescription()}</h5>
+                        {list}
                     </Col>
                     <Col sm={2} className='right-menu'>
                         <Row>
@@ -83,11 +116,13 @@ class ProjectPage extends Component {
 
 const mapStateToProps = state => ({
     project: state.currentProject,
+    tasks: state.tasks.list,
+    selected: state.tasks.selected,
     projectAuthors: state.projectAuthors,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {},
+    {loadTasks, select},
     dispatch
 );
 
