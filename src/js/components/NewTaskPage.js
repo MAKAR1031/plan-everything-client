@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {Button, Container, Row, Col, FormGroup, Input, Label, FormFeedback} from "reactstrap";
 import {Link} from "react-router-dom";
 import TaskStep from './TaskStep';
+import TaskCriterion from './TaskCriterion';
 
 class NewTaskPage extends Component {
 
@@ -20,7 +21,8 @@ class NewTaskPage extends Component {
             value: '',
             isInvalid: false
         },
-        steps: []
+        steps: [],
+        criteria: []
     };
 
     state = this.initialState;
@@ -59,6 +61,36 @@ class NewTaskPage extends Component {
         this.setState({steps});
     };
 
+    onAddCriterion = () => {
+        this.setState(({criteria}) => ({
+            criteria: [
+                ...criteria,
+                {
+                    name: {
+                        value: '',
+                        isInvalid: false
+                    },
+                    expectedValue: {
+                        value: 0,
+                        isInvalid: false
+                    }
+                }
+            ]
+        }));
+    };
+
+    onChangeCriterion = (criterion, index) => {
+        this.setState({
+            criteria: this.state.criteria.map((c, i) => i === index ? criterion : c)
+        })
+    };
+
+    onRemoveCriterion = (index) => {
+        const criteria = this.state.criteria;
+        criteria.splice(index, 1);
+        this.setState({criteria});
+    };
+
     onSave = () => {
     };
 
@@ -71,6 +103,14 @@ class NewTaskPage extends Component {
                       onChangeHandler={this.onChangeStep}
                       onRemoveHandler={this.onRemoveStep}/>
         )) : <Container className='text-danger text-center'>No steps</Container>;
+
+        const criteriaList = this.state.criteria.length > 0 ? this.state.criteria.map((criterion, i) => (
+            <TaskCriterion index={i}
+                           key={i}
+                           criterion={criterion}
+                           onChangeHandler={this.onChangeCriterion}
+                           onRemoveHandler={this.onRemoveCriterion}/>
+        )) : <Container className='text-danger text-center'>No criteria</Container>;
 
         return (
             <Container fluid={true}>
@@ -127,6 +167,17 @@ class NewTaskPage extends Component {
                                 <Row>
                                     <Col className='text-right'>
                                         <Button color='primary' onClick={this.onAddStep}>Add step</Button>
+                                    </Col>
+                                </Row>
+                            </Container>
+                        </Container>
+
+                        <Container className='w-50 border p-3 mb-3'>
+                            <Container className='w-75'>
+                                {criteriaList}
+                                <Row>
+                                    <Col className='text-right'>
+                                        <Button color='primary' onClick={this.onAddCriterion}>Add criterion</Button>
                                     </Col>
                                 </Row>
                             </Container>
