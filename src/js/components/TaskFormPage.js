@@ -6,7 +6,7 @@ import {Link} from "react-router-dom";
 import TaskStep from './TaskStep';
 import TaskCriterion from './TaskCriterion';
 import linkUtils from '../util/link-utils';
-import {createTask} from "../actions/tasks_actions";
+import {saveTask} from "../actions/tasks_actions";
 
 class TaskFormPage extends Component {
 
@@ -25,7 +25,9 @@ class TaskFormPage extends Component {
             isInvalid: false
         },
         steps: [],
-        criteria: []
+        criteria: [],
+        removedSteps: [],
+        removedCriteria: []
     };
 
     componentDidMount() {
@@ -71,7 +73,9 @@ class TaskFormPage extends Component {
                         value: criterion.expectedValue,
                         isInvalid: false
                     }
-                }))
+                })),
+                removedSteps: [],
+                removedCriteria: []
             };
             this.setState(state);
         }
@@ -111,8 +115,14 @@ class TaskFormPage extends Component {
 
     onRemoveStep = (index) => {
         const steps = this.state.steps;
-        steps.splice(index, 1);
-        this.setState({steps});
+        const removedSteps = this.state.removedSteps;
+        const removed = steps.splice(index, 1);
+        if (removed[0].url) {
+            removedSteps.push(removed[0]);
+            this.setState({steps, removedSteps});
+        } else {
+            this.setState({steps});
+        }
     };
 
     onAddCriterion = () => {
@@ -141,8 +151,14 @@ class TaskFormPage extends Component {
 
     onRemoveCriterion = (index) => {
         const criteria = this.state.criteria;
-        criteria.splice(index, 1);
-        this.setState({criteria});
+        const removedCriteria = this.state.removedCriteria;
+        const removed = criteria.splice(index, 1);
+        if (removed[0].url) {
+            removedCriteria.push(removed[0]);
+            this.setState({criteria, removedCriteria});
+        } else {
+            this.setState({criteria});
+        }
     };
 
     onSave = () => {
@@ -204,25 +220,26 @@ class TaskFormPage extends Component {
             this.setState({criteria});
         }
         if (valid) {
-            if (this.props.isEditMode) {
-
-            } else {
-                const task = {
-                    name: this.state.name.value,
-                    description: this.state.description.value,
-                    expectedCompleteDate: this.state.finishDate.value,
-                    project: linkUtils.linkUrl(this.props.project._links.self)
-                };
-                const steps = this.state.steps.map(step => ({
-                    name: step.name.value,
-                    needReport: step.needReport
-                }));
-                const criteria = this.state.criteria.map(criterion => ({
-                    name: criterion.name.value,
-                    expectedValue: criterion.expectedValue.value
-                }));
-                this.props.createTask(task, steps, criteria);
-            }
+            const task = {
+                ...(this.state.url ? {url: this.state.url} : {}),
+                name: this.state.name.value,
+                description: this.state.description.value,
+                expectedCompleteDate: this.state.finishDate.value,
+                project: linkUtils.linkUrl(this.props.project._links.self)
+            };
+            const steps = this.state.steps.map(step => ({
+                ...(step.url ? {url: step.url} : {}),
+                name: step.name.value,
+                needReport: step.needReport
+            }));
+            const criteria = this.state.criteria.map(criterion => ({
+                ...(criterion.url ? {url: criterion.url} : {}),
+                name: criterion.name.value,
+                expectedValue: criterion.expectedValue.value
+            }));
+            const removedSteps = this.state.removedSteps;
+            const removedCriteria = this.state.removedCriteria;
+            this.props.saveTask(task, steps, criteria, removedSteps, removedCriteria);
         }
     };
 
@@ -347,7 +364,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {createTask},
+    {saveTask},
     dispatch
 );
 
