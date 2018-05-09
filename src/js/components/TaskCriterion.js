@@ -38,7 +38,7 @@ class TaskCriterion extends Component {
                 <Col sm={4}>
                     <FormGroup>
                         <Input name='expectedValue'
-                               type='text'
+                               type='number'
                                placeholder='Expected value'
                                value={this.props.criterion.expectedValue.value}
                                invalid={this.props.criterion.expectedValue.isInvalid}

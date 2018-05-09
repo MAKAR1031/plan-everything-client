@@ -5,10 +5,11 @@ import {Button, Container, Row, Col, FormGroup, Input, Label, FormFeedback} from
 import {Link} from "react-router-dom";
 import TaskStep from './TaskStep';
 import TaskCriterion from './TaskCriterion';
+import linkUtils from '../util/link-utils';
 
 class NewTaskPage extends Component {
 
-    initialState = {
+    state = {
         name: {
             value: '',
             isInvalid: false
@@ -25,13 +26,11 @@ class NewTaskPage extends Component {
         criteria: []
     };
 
-    state = this.initialState;
-
     projectName = () => this.props.project ? this.props.project.name : '';
 
     onChangeField = e => {
         const {name, value} = e.target;
-        this.setState({[name]: {value, isInvalid: false}}, () => console.log(this.state));
+        this.setState({[name]: {value, isInvalid: false}});
     };
 
     onAddStep = () => {
@@ -92,6 +91,79 @@ class NewTaskPage extends Component {
     };
 
     onSave = () => {
+        let valid = true;
+        if (!this.state.name.value) {
+            this.setState(({name}) => ({name: {...name, isInvalid: true}}));
+            valid = false;
+        }
+        if (this.state.finishDate.value) {
+            const now = new Date();
+            now.setHours(0, 0, 0, 0);
+            const finishDate = new Date(this.state.finishDate.value);
+            if (now >= finishDate) {
+                this.setState(({finishDate}) => ({finishDate: {...finishDate, isInvalid: true}}));
+                valid = false;
+            }
+        }
+        if (this.state.steps.length === 0) {
+            valid = false;
+        } else {
+            const steps = this.state.steps.map(step => {
+                const invalidName = !step.name.value;
+                if (!invalidName) {
+                    return step;
+                }
+                valid = false;
+                return {
+                    ...step,
+                    name: {
+                        ...step.name,
+                        isInvalid: invalidName
+                    }
+                };
+            });
+            this.setState({steps});
+        }
+        if (this.state.criteria.length === 0) {
+            valid = false;
+        } else {
+            const criteria = this.state.criteria.map(criterion => {
+                const invalidName = !criterion.name.value;
+                const invalidExpectedValue = !criterion.expectedValue.value;
+                if (!invalidName && !invalidExpectedValue) {
+                    return criterion;
+                }
+                valid = false;
+                return {
+                    ...criterion,
+                    name: {
+                        ...criterion.name,
+                        isInvalid: invalidName
+                    },
+                    expectedValue: {
+                        ...criterion.expectedValue,
+                        isInvalid: invalidExpectedValue
+                    }
+                };
+            });
+            this.setState({criteria});
+        }
+        if (valid) {
+            const task = {
+                name: this.state.name.value,
+                description: this.state.description.value,
+                expectedCompleteDate: this.state.finishDate.value,
+                project: linkUtils.linkUrl(this.props.project._links.self)
+            };
+            const steps = this.state.steps.map(step => ({
+                name: step.name.value,
+                needReport: step.needReport
+            }));
+            const criteria = this.state.criteria.map(criterion => ({
+                name: criterion.name.value,
+                expectedValue: criterion.expectedValue.value
+            }));
+        }
     };
 
     render() {
