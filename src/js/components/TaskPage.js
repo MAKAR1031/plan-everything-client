@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {startEditTask, loadUpdateInfo, deleteTask} from '../actions/tasks_actions';
+import {startEditTask, loadUpdateInfo, deleteTask, start} from '../actions/tasks_actions';
 import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
 import sort from '../util/sort_by_order';
@@ -58,6 +58,8 @@ class TaskPage extends Component {
 
     canAssign = () => this.props.selected ? this.props.selected._links.assign != null : false;
 
+    canStart = () => this.props.selected ? this.props.selected._links.start != null : false;
+
     onEdit = () => this.props.edit(this.props.selected);
 
     onDelete = () => {
@@ -70,6 +72,8 @@ class TaskPage extends Component {
     };
 
     onAssign = () => this.props.openAssignDialog();
+
+    onStart = () => this.props.start(this.props.selected);
 
     render() {
 
@@ -105,6 +109,14 @@ class TaskPage extends Component {
             <Row>
                 <Col>
                     <Button color='primary' onClick={this.onAssign}>Assign task</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        const startAction = this.canStart() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onStart}>Start task</Button>
                 </Col>
             </Row>
         ) : '';
@@ -151,6 +163,7 @@ class TaskPage extends Component {
                         {editAction}
                         {deleteAction}
                         {assignAction}
+                        {startAction}
                         <Row>
                             <Col>
                                 <Link to='project'>Go back</Link>
@@ -175,7 +188,8 @@ const mapDispatchToProps = dispatch => bindActionCreators(
         edit: startEditTask,
         deleteTask,
         loadUpdateInfo,
-        openAssignDialog
+        openAssignDialog,
+        start
     },
     dispatch
 );

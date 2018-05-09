@@ -184,3 +184,14 @@ export const assign = (task, memberId) => dispatch => {
         alertify.success('Task assigned');
     });
 };
+
+export const start = (task) => dispatch => {
+    const url = linkUtils.linkUrlWithProjection(task._links.start, 'full');
+    baseUrlApi.put(url, {}, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_UPDATED',
+            task: res.data
+        });
+        alertify.success('Task started');
+    });
+};
