@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import TaskStep from './TaskStep';
 import TaskCriterion from './TaskCriterion';
 import linkUtils from '../util/link-utils';
+import {createTask} from "../actions/tasks_actions";
 
 class NewTaskPage extends Component {
 
@@ -163,6 +164,7 @@ class NewTaskPage extends Component {
                 name: criterion.name.value,
                 expectedValue: criterion.expectedValue.value
             }));
+            this.props.createTask(task, steps, criteria);
         }
     };
 
@@ -283,7 +285,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {},
+    {createTask},
     dispatch
 );
 
