@@ -35,7 +35,7 @@ class ProjectPage extends Component {
 
     onSelect = (task) => this.props.select(task);
 
-    onNewTask = () => this.props.history.push('/newTask');
+    onNewTask = () => this.props.history.push('/editTask');
 
     onManageTags = () => this.props.history.push('/manageTags');
 

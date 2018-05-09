@@ -8,9 +8,10 @@ import TaskCriterion from './TaskCriterion';
 import linkUtils from '../util/link-utils';
 import {createTask} from "../actions/tasks_actions";
 
-class NewTaskPage extends Component {
+class TaskFormPage extends Component {
 
     state = {
+        initToEdit: false,
         name: {
             value: '',
             isInvalid: false
@@ -26,6 +27,54 @@ class NewTaskPage extends Component {
         steps: [],
         criteria: []
     };
+
+    componentDidMount() {
+        this.initForm();
+    }
+
+    componentDidUpdate() {
+        this.initForm();
+    }
+
+    initForm = () => {
+        if (this.props.isEditMode && this.props.selected && !this.state.initToEdit) {
+            const task = this.props.selected;
+            const state = {
+                initToEdit: true,
+                name: {
+                    value: task.name,
+                    isInvalid: false
+                },
+                description: {
+                    value: task.description,
+                    isInvalid: false
+                },
+                finishDate: {
+                    value: task.expectedCompleteDate,
+                    isInvalid: false
+                },
+                steps: task.steps.map(step => ({
+                    name: {
+                        value: step.name,
+                    },
+                    needReport: step.needReport
+                })),
+                criteria: task.criteria.map(criterion => ({
+                    name: {
+                        value: criterion.name,
+                        isInvalid: false
+                    },
+                    expectedValue: {
+                        value: criterion.expectedValue,
+                        isInvalid: false
+                    }
+                }))
+            };
+            this.setState(state);
+        }
+    };
+
+    pageTitle = () => this.props.isEditMode ? 'Edit task' : 'New task';
 
     projectName = () => this.props.project ? this.props.project.name : '';
 
@@ -190,7 +239,7 @@ class NewTaskPage extends Component {
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
-                        <h2 className='text-center mt-2 mb-3'>New task</h2>
+                        <h2 className='text-center mt-2 mb-3'>{this.pageTitle()}</h2>
                         <Container className='w-50 border p-3 mb-3'>
                             <Container className='w-75'>
                                 <FormGroup row>
@@ -281,7 +330,9 @@ class NewTaskPage extends Component {
 }
 
 const mapStateToProps = state => ({
-    project: state.currentProject
+    project: state.currentProject,
+    isEditMode: state.tasks.isEditMode,
+    selected: state.tasks.selected
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
@@ -289,4 +340,4 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     dispatch
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewTaskPage);
+export default connect(mapStateToProps, mapDispatchToProps)(TaskFormPage);
