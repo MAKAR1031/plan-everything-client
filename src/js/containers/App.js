@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {BrowserRouter, Route} from 'react-router-dom';
+import {Route} from 'react-router-dom';
 import RedirectToSignInComponent from '../components/RedirectToSignInComponent';
 import Header from '../components/Header';
 import SignInForm from '../components/SignInForm';
 import SignUpForm from '../components/SignUpForm';
 import AdminRouter from './AdminRouter';
 import UserRouter from './UserRouter';
+import {Router} from 'react-router';
+import history from '../util/history';
 
 class App extends Component {
     isRole = role => this.props.account ? this.props.account.role.code === role : false;
@@ -20,7 +22,7 @@ class App extends Component {
         const userRoutes = this.isUser() ? (<UserRouter/>) : '';
 
         return (
-            <BrowserRouter>
+            <Router history={history}>
                 <div>
                     <RedirectToSignInComponent/>
                     <Header/>
@@ -29,7 +31,7 @@ class App extends Component {
                     {adminRoutes}
                     {userRoutes}
                 </div>
-            </BrowserRouter>
+            </Router>
         );
     }
 }
