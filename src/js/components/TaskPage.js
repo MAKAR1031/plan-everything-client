@@ -3,11 +3,25 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Progress, Row} from "reactstrap";
 import {Link} from "react-router-dom";
-import {startEditTask} from "../actions/tasks_actions";
+import {startEditTask, loadUpdateInfo} from "../actions/tasks_actions";
 import moment from 'moment';
 import sort from '../util/sort_by_order';
 
 class TaskPage extends Component {
+
+    componentDidMount() {
+        this.checkAndLoadUpdateInfo();
+    }
+
+    componentDidUpdate() {
+        this.checkAndLoadUpdateInfo();
+    }
+
+    checkAndLoadUpdateInfo = () => {
+        if (!this.props.updateInfo && this.props.selected) {
+            this.props.loadUpdateInfo(this.props.selected);
+        }
+    };
 
     projectName = () => this.props.project ? this.props.project.name : '';
 
@@ -121,7 +135,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators(
     {
-        edit: startEditTask
+        edit: startEditTask,
+        loadUpdateInfo
     },
     dispatch
 );

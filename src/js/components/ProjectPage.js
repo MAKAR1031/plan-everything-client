@@ -37,7 +37,7 @@ class ProjectPage extends Component {
 
     onNewTask = () => this.props.newTask();
 
-    onOpenTask = () => this.props.open(this.props.selected);
+    onOpenTask = () => this.props.open();
 
     onEditTask = () => this.props.editTask(this.props.selected);
 

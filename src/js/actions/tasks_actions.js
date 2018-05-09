@@ -25,7 +25,11 @@ export const select = (task) => dispatch => {
     })
 };
 
-export const open = (task) => dispatch => {
+export const open = () => () => {
+    history.push('/task');
+};
+
+export const loadUpdateInfo = (task) => dispatch => {
     const updateInfoUrl = linkUtils.linkUrl(task._links.updateInfo);
     baseUrlApi.get(updateInfoUrl, authHeader()).then(res => {
         dispatch({
@@ -33,7 +37,6 @@ export const open = (task) => dispatch => {
             info: res.data
         })
     });
-    history.push('/task');
 };
 
 export const startCreateNewTask = () => dispatch => {
@@ -100,7 +103,8 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
                 dispatch({
                     type: 'TASK_UPDATED',
                     task: res.data
-                })
+                });
+                history.push('/task');
             });
         }).catch(reason => {
             alertify.error('Error while save task');
