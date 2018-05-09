@@ -3,6 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Container, Row, Col, FormGroup, Input, Label, FormFeedback} from "reactstrap";
 import {Link} from "react-router-dom";
+import TaskStep from './TaskStep';
 
 class NewTaskPage extends Component {
 
@@ -18,7 +19,8 @@ class NewTaskPage extends Component {
         finishDate: {
             value: '',
             isInvalid: false
-        }
+        },
+        steps: []
     };
 
     state = this.initialState;
@@ -30,16 +32,52 @@ class NewTaskPage extends Component {
         this.setState({[name]: {value, isInvalid: false}}, () => console.log(this.state));
     };
 
+    onAddStep = () => {
+        this.setState(({steps}) => ({
+            steps: [
+                ...steps,
+                {
+                    name: {
+                        value: '',
+                        isInvalid: false
+                    },
+                    needReport: false
+                }
+            ]
+        }));
+    };
+
+    onChangeStep = (step, index) => {
+        this.setState({
+            steps: this.state.steps.map((s, i) => i === index ? step : s)
+        })
+    };
+
+    onRemoveStep = (index) => {
+        const steps = this.state.steps;
+        steps.splice(index, 1);
+        this.setState({steps});
+    };
+
     onSave = () => {
     };
 
     render() {
+
+        const stepList = this.state.steps.length > 0 ? this.state.steps.map((step, i) => (
+            <TaskStep index={i}
+                      key={i}
+                      step={step}
+                      onChangeHandler={this.onChangeStep}
+                      onRemoveHandler={this.onRemoveStep}/>
+        )) : <Container className='text-danger text-center'>No steps</Container>;
+
         return (
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>New task</h2>
-                        <Container className='w-50 border pb-1 pt-3 pl-3 pr-3 mb-3'>
+                        <Container className='w-50 border p-3 mb-3'>
                             <Container className='w-75'>
                                 <FormGroup row>
                                     <Label for='taskName' sm={2}>Name</Label>
@@ -80,6 +118,17 @@ class NewTaskPage extends Component {
                                         <FormFeedback>Invalid finish date</FormFeedback>
                                     </Col>
                                 </FormGroup>
+                            </Container>
+                        </Container>
+
+                        <Container className='w-50 border p-3 mb-3'>
+                            <Container className='w-75'>
+                                {stepList}
+                                <Row>
+                                    <Col className='text-right'>
+                                        <Button color='primary' onClick={this.onAddStep}>Add step</Button>
+                                    </Col>
+                                </Row>
                             </Container>
                         </Container>
                     </Col>
