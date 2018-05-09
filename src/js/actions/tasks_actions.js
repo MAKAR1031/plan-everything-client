@@ -125,7 +125,8 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
                 dispatch({
                     type: 'TASK_CREATED',
                     task: res.data
-                })
+                });
+                history.push('/task');
             });
         }).catch(reason => {
             alertify.error('Error while save task');
