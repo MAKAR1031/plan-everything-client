@@ -161,3 +161,26 @@ export const deleteTask = (task) => dispatch => {
         history.push('/project');
     });
 };
+
+export const openAssignDialog = () => dispatch => {
+    dispatch({
+        type: 'ASSIGN_TASK_DIALOG_OPENED'
+    });
+};
+
+export const closeAssignDialog = () => dispatch => {
+    dispatch({
+        type: 'ASSIGN_TASK_DIALOG_CLOSED'
+    });
+};
+
+export const assign = (task, memberId) => dispatch => {
+    const url = linkUtils.linkUrlWithProjection(task._links.assign, 'full');
+    baseUrlApi.put(url, memberId, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_UPDATED',
+            task: res.data
+        });
+        alertify.success('Task assigned');
+    });
+};

@@ -4,6 +4,7 @@ export default function selected(state = initialState, action) {
     switch (action.type) {
         case 'TASK_SELECTED':
         case 'TASK_CREATED':
+        case 'TASK_UPDATED':
             return action.task;
         case 'PROJECT_SELECTED':
         case 'START_CREATE_NEW_TASK':

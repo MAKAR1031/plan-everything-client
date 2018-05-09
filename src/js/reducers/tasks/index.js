@@ -6,6 +6,7 @@ import isEditMode from './is_edit_mode';
 import steps from './steps';
 import criteria from './criteria';
 import updateInfo from './update_info';
+import assignDialog from './assign_dialog';
 
 export default combineReducers({
     list,
@@ -13,5 +14,6 @@ export default combineReducers({
     isEditMode,
     steps,
     criteria,
-    updateInfo
+    updateInfo,
+    assignDialog
 });

@@ -4,9 +4,11 @@ import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {startEditTask, loadUpdateInfo, deleteTask} from '../actions/tasks_actions';
+import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
 import sort from '../util/sort_by_order';
 import alertify from 'alertify.js';
+import AssignTaskDialog from './AssignTaskDialog';
 
 class TaskPage extends Component {
 
@@ -54,6 +56,8 @@ class TaskPage extends Component {
 
     canDelete = () => this.props.selected ? this.props.selected._links.delete != null : false;
 
+    canAssign = () => this.props.selected ? this.props.selected._links.assign != null : false;
+
     onEdit = () => this.props.edit(this.props.selected);
 
     onDelete = () => {
@@ -64,6 +68,8 @@ class TaskPage extends Component {
             .confirm(`Delete '${task.name}' task?`,
                 () => this.props.deleteTask(task));
     };
+
+    onAssign = () => this.props.openAssignDialog();
 
     render() {
 
@@ -91,6 +97,14 @@ class TaskPage extends Component {
             <Row>
                 <Col>
                     <Button color='primary' onClick={this.onDelete}>Delete task</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        const assignAction = this.canAssign() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onAssign}>Assign task</Button>
                 </Col>
             </Row>
         ) : '';
@@ -136,6 +150,7 @@ class TaskPage extends Component {
                         </Row>
                         {editAction}
                         {deleteAction}
+                        {assignAction}
                         <Row>
                             <Col>
                                 <Link to='project'>Go back</Link>
@@ -143,6 +158,7 @@ class TaskPage extends Component {
                         </Row>
                     </Col>
                 </Row>
+                <AssignTaskDialog/>
             </Container>
         );
     }
@@ -158,7 +174,8 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     {
         edit: startEditTask,
         deleteTask,
-        loadUpdateInfo
+        loadUpdateInfo,
+        openAssignDialog
     },
     dispatch
 );
