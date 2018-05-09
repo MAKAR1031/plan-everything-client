@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import NewProjectDialog from './NewProjectDialog';
 import {getAuthor, getCurrentMember, load, selectProject} from '../actions/projects_actions'
 import {open as openDialog} from '../actions/new_project_dialog_actions';
+import {Container} from "reactstrap";
 
 class ProjectList extends Component {
 
@@ -69,11 +70,13 @@ class ProjectList extends Component {
                         <button className='btn btn-secondary' onClick={this.props.openDialog}>New project</button>
                     </div>
                     <div className="col-10">
-                        <h2 className='text-center mt-2 mb-3'>Project list</h2>
-                        {projectList}
+                        <Container fluid={true} className='main-container'>
+                            <h2 className='text-center mt-2 mb-3'>Project list</h2>
+                            {projectList}
+                        </Container>
                     </div>
                 </div>
-                <NewProjectDialog />
+                <NewProjectDialog/>
             </div>
         );
     }

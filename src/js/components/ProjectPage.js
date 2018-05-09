@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
 import {Link} from "react-router-dom";
-import {loadTasks, select, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
+import {loadTasks, select, open, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 
 class ProjectPage extends Component {
 
@@ -37,6 +37,8 @@ class ProjectPage extends Component {
 
     onNewTask = () => this.props.newTask();
 
+    onOpenTask = () => this.props.open(this.props.selected);
+
     onEditTask = () => this.props.editTask(this.props.selected);
 
     onManageTags = () => this.props.history.push('/manageTags');
@@ -58,6 +60,7 @@ class ProjectPage extends Component {
                 <CardBody>
                     <Row>
                         <Col>{task.name}</Col>
+                        <Col>{task.status}</Col>
                     </Row>
                 </CardBody>
             </Card>
@@ -67,6 +70,14 @@ class ProjectPage extends Component {
             <Row>
                 <Col>
                     <Button color='primary' onClick={this.onNewTask}>New task</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        const openTaskAction = this.props.selected ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onOpenTask}>Open</Button>
                 </Col>
             </Row>
         ) : '';
@@ -101,7 +112,9 @@ class ProjectPage extends Component {
                 <Row>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
-                        <h5 className='mt-2 mb-3'>{this.projectDescription()}</h5>
+                        <Container className='mb-4'>
+                            <h4 className='text-muted'>{this.projectDescription()}</h4>
+                        </Container>
                         {list}
                     </Col>
                     <Col sm={2} className='right-menu'>
@@ -112,6 +125,7 @@ class ProjectPage extends Component {
                             <Col>{this.projectAuthor()}</Col>
                         </Row>
                         {newTaskAction}
+                        {openTaskAction}
                         {editTaskAction}
                         {manageTagsAction}
                         {manageMembersAction}
@@ -138,6 +152,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     {
         loadTasks,
         select,
+        open,
         newTask: startCreateNewTask,
         editTask: startEditTask
     },

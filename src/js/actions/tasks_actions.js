@@ -25,6 +25,17 @@ export const select = (task) => dispatch => {
     })
 };
 
+export const open = (task) => dispatch => {
+    const updateInfoUrl = linkUtils.linkUrl(task._links.updateInfo);
+    baseUrlApi.get(updateInfoUrl, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_UPDATE_INFO_LOADED',
+            info: res.data
+        })
+    });
+    history.push('/task');
+};
+
 export const startCreateNewTask = () => dispatch => {
     dispatch({
         type: 'START_CREATE_NEW_TASK'

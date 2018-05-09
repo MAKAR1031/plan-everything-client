@@ -67,11 +67,11 @@ class ManageTagsPage extends Component {
         );
 
         const editButton = this.props.selected ? (
-                <Row>
-                    <Col>
-                        <Button color='primary' onClick={this.onEdit}>Edit tag</Button>
-                    </Col>
-                </Row>
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onEdit}>Edit tag</Button>
+                </Col>
+            </Row>
         ) : '';
 
         const deleteButton = this.props.selected ? (
@@ -86,13 +86,15 @@ class ManageTagsPage extends Component {
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
-                        <h2 className='text-center mt-2 mb-3'>Manage tags</h2>
-                        <Input
-                            className='mb-4'
-                            placeholder='Search tag...'
-                            value={this.state.search}
-                            onChange={this.onSearch}/>
-                        {list}
+                        <Container fluid={true} className='main-container'>
+                            <h2 className='text-center mt-2 mb-3'>Manage tags</h2>
+                            <Input
+                                className='mb-4'
+                                placeholder='Search tag...'
+                                value={this.state.search}
+                                onChange={this.onSearch}/>
+                            {list}
+                        </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
                         <Row>

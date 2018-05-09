@@ -7,6 +7,7 @@ import TaskStep from './TaskStep';
 import TaskCriterion from './TaskCriterion';
 import linkUtils from '../util/link-utils';
 import {saveTask} from "../actions/tasks_actions";
+import sort from '../util/sort_by_order';
 
 class TaskFormPage extends Component {
 
@@ -56,14 +57,14 @@ class TaskFormPage extends Component {
                     value: task.expectedCompleteDate ? task.expectedCompleteDate : '',
                     isInvalid: false
                 },
-                steps: this.props.steps._embedded.taskSteps.map(step => ({
+                steps: this.props.steps._embedded.taskSteps.sort(sort).map(step => ({
                     url: step._links.self.href,
                     name: {
                         value: step.name,
                     },
                     needReport: step.needReport
                 })),
-                criteria: this.props.criteria._embedded.criteria.map(criterion => ({
+                criteria: this.props.criteria._embedded.criteria.sort(sort).map(criterion => ({
                     url: criterion._links.self.href,
                     name: {
                         value: criterion.name,
@@ -227,15 +228,17 @@ class TaskFormPage extends Component {
                 expectedCompleteDate: this.state.finishDate.value,
                 project: linkUtils.linkUrl(this.props.project._links.self)
             };
-            const steps = this.state.steps.map(step => ({
+            const steps = this.state.steps.map((step, order) => ({
                 ...(step.url ? {url: step.url} : {}),
                 name: step.name.value,
-                needReport: step.needReport
+                needReport: step.needReport,
+                order
             }));
-            const criteria = this.state.criteria.map(criterion => ({
+            const criteria = this.state.criteria.map((criterion, order) => ({
                 ...(criterion.url ? {url: criterion.url} : {}),
                 name: criterion.name.value,
-                expectedValue: criterion.expectedValue.value
+                expectedValue: criterion.expectedValue.value,
+                order
             }));
             const removedSteps = this.state.removedSteps;
             const removedCriteria = this.state.removedCriteria;
@@ -265,70 +268,72 @@ class TaskFormPage extends Component {
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
-                        <h2 className='text-center mt-2 mb-3'>{this.pageTitle()}</h2>
-                        <Container className='w-50 border p-3 mb-3'>
-                            <Container className='w-75'>
-                                <FormGroup row>
-                                    <Label for='taskName' sm={2}>Name</Label>
-                                    <Col>
-                                        <Input id='taskName'
-                                               name='name'
-                                               type='text'
-                                               placeholder='Task name'
-                                               value={this.state.name.value}
-                                               invalid={this.state.name.isInvalid}
-                                               onChange={this.onChangeField}/>
-                                        <FormFeedback>Invalid name</FormFeedback>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for='taskDescription' sm={2}>Description</Label>
-                                    <Col>
-                                        <Input id='taskDescription'
-                                               name='description'
-                                               type='textarea'
-                                               placeholder='Task description'
-                                               value={this.state.description.value}
-                                               invalid={this.state.description.isInvalid}
-                                               onChange={this.onChangeField}/>
-                                        <FormFeedback>Invalid description</FormFeedback>
-                                    </Col>
-                                </FormGroup>
-                                <FormGroup row>
-                                    <Label for='finishDate' sm={2}>Finish date</Label>
-                                    <Col>
-                                        <Input id='finishDate'
-                                               name='finishDate'
-                                               type='date'
-                                               placeholder='Finish date'
-                                               value={this.state.finishDate.value}
-                                               invalid={this.state.finishDate.isInvalid}
-                                               onChange={this.onChangeField}/>
-                                        <FormFeedback>Invalid finish date</FormFeedback>
-                                    </Col>
-                                </FormGroup>
+                        <Container fluid={true} className='main-container'>
+                            <h2 className='text-center mt-2 mb-3'>{this.pageTitle()}</h2>
+                            <Container className='w-50 border p-3 mb-3'>
+                                <Container className='w-75'>
+                                    <FormGroup row>
+                                        <Label for='taskName' sm={2}>Name</Label>
+                                        <Col>
+                                            <Input id='taskName'
+                                                   name='name'
+                                                   type='text'
+                                                   placeholder='Task name'
+                                                   value={this.state.name.value}
+                                                   invalid={this.state.name.isInvalid}
+                                                   onChange={this.onChangeField}/>
+                                            <FormFeedback>Invalid name</FormFeedback>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Label for='taskDescription' sm={2}>Description</Label>
+                                        <Col>
+                                            <Input id='taskDescription'
+                                                   name='description'
+                                                   type='textarea'
+                                                   placeholder='Task description'
+                                                   value={this.state.description.value}
+                                                   invalid={this.state.description.isInvalid}
+                                                   onChange={this.onChangeField}/>
+                                            <FormFeedback>Invalid description</FormFeedback>
+                                        </Col>
+                                    </FormGroup>
+                                    <FormGroup row>
+                                        <Label for='finishDate' sm={2}>Finish date</Label>
+                                        <Col>
+                                            <Input id='finishDate'
+                                                   name='finishDate'
+                                                   type='date'
+                                                   placeholder='Finish date'
+                                                   value={this.state.finishDate.value}
+                                                   invalid={this.state.finishDate.isInvalid}
+                                                   onChange={this.onChangeField}/>
+                                            <FormFeedback>Invalid finish date</FormFeedback>
+                                        </Col>
+                                    </FormGroup>
+                                </Container>
                             </Container>
-                        </Container>
 
-                        <Container className='w-50 border p-3 mb-3'>
-                            <Container className='w-75'>
-                                {stepList}
-                                <Row>
-                                    <Col className='text-right'>
-                                        <Button color='primary' onClick={this.onAddStep}>Add step</Button>
-                                    </Col>
-                                </Row>
+                            <Container className='w-50 border p-3 mb-3'>
+                                <Container className='w-75'>
+                                    {stepList}
+                                    <Row>
+                                        <Col className='text-right'>
+                                            <Button color='primary' onClick={this.onAddStep}>Add step</Button>
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </Container>
-                        </Container>
 
-                        <Container className='w-50 border p-3 mb-3'>
-                            <Container className='w-75'>
-                                {criteriaList}
-                                <Row>
-                                    <Col className='text-right'>
-                                        <Button color='primary' onClick={this.onAddCriterion}>Add criterion</Button>
-                                    </Col>
-                                </Row>
+                            <Container className='w-50 border p-3 mb-3'>
+                                <Container className='w-75'>
+                                    {criteriaList}
+                                    <Row>
+                                        <Col className='text-right'>
+                                            <Button color='primary' onClick={this.onAddCriterion}>Add criterion</Button>
+                                        </Col>
+                                    </Row>
+                                </Container>
                             </Container>
                         </Container>
                     </Col>

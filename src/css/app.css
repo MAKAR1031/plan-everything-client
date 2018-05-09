@@ -2,6 +2,11 @@
     height: 60px;
 }
 
+.main-container {
+    max-height: calc(100% - 60px);
+    overflow: auto;
+}
+
 .left-menu,
 .right-menu {
     height: calc(100% - 60px);
