@@ -37,29 +37,32 @@ class TaskFormPage extends Component {
     }
 
     initForm = () => {
-        if (this.props.isEditMode && this.props.selected && !this.state.initToEdit) {
+        if (this.props.isEditMode && this.dataLoaded() && !this.state.initToEdit) {
             const task = this.props.selected;
             const state = {
                 initToEdit: true,
+                url: task._links.self.href,
                 name: {
                     value: task.name,
-                    isInvalid: false
+                    isInvalid: false,
                 },
                 description: {
-                    value: task.description,
+                    value: task.description ? task.description : '',
                     isInvalid: false
                 },
                 finishDate: {
-                    value: task.expectedCompleteDate,
+                    value: task.expectedCompleteDate ? task.expectedCompleteDate : '',
                     isInvalid: false
                 },
-                steps: task.steps.map(step => ({
+                steps: this.props.steps._embedded.taskSteps.map(step => ({
+                    url: step._links.self.href,
                     name: {
                         value: step.name,
                     },
                     needReport: step.needReport
                 })),
-                criteria: task.criteria.map(criterion => ({
+                criteria: this.props.criteria._embedded.criteria.map(criterion => ({
+                    url: criterion._links.self.href,
                     name: {
                         value: criterion.name,
                         isInvalid: false
@@ -73,6 +76,8 @@ class TaskFormPage extends Component {
             this.setState(state);
         }
     };
+
+    dataLoaded = () => this.props.selected && this.props.steps && this.props.criteria;
 
     pageTitle = () => this.props.isEditMode ? 'Edit task' : 'New task';
 
@@ -199,21 +204,25 @@ class TaskFormPage extends Component {
             this.setState({criteria});
         }
         if (valid) {
-            const task = {
-                name: this.state.name.value,
-                description: this.state.description.value,
-                expectedCompleteDate: this.state.finishDate.value,
-                project: linkUtils.linkUrl(this.props.project._links.self)
-            };
-            const steps = this.state.steps.map(step => ({
-                name: step.name.value,
-                needReport: step.needReport
-            }));
-            const criteria = this.state.criteria.map(criterion => ({
-                name: criterion.name.value,
-                expectedValue: criterion.expectedValue.value
-            }));
-            this.props.createTask(task, steps, criteria);
+            if (this.props.isEditMode) {
+
+            } else {
+                const task = {
+                    name: this.state.name.value,
+                    description: this.state.description.value,
+                    expectedCompleteDate: this.state.finishDate.value,
+                    project: linkUtils.linkUrl(this.props.project._links.self)
+                };
+                const steps = this.state.steps.map(step => ({
+                    name: step.name.value,
+                    needReport: step.needReport
+                }));
+                const criteria = this.state.criteria.map(criterion => ({
+                    name: criterion.name.value,
+                    expectedValue: criterion.expectedValue.value
+                }));
+                this.props.createTask(task, steps, criteria);
+            }
         }
     };
 
@@ -332,7 +341,9 @@ class TaskFormPage extends Component {
 const mapStateToProps = state => ({
     project: state.currentProject,
     isEditMode: state.tasks.isEditMode,
-    selected: state.tasks.selected
+    selected: state.tasks.selected,
+    steps: state.tasks.steps,
+    criteria: state.tasks.criteria
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(

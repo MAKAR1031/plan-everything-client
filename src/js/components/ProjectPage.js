@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
 import {Link} from "react-router-dom";
-import {loadTasks, select} from "../actions/tasks_actions";
+import {loadTasks, select, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 
 class ProjectPage extends Component {
 
@@ -35,11 +35,15 @@ class ProjectPage extends Component {
 
     onSelect = (task) => this.props.select(task);
 
-    onNewTask = () => this.props.history.push('/editTask');
+    onNewTask = () => this.props.newTask();
+
+    onEditTask = () => this.props.editTask(this.props.selected);
 
     onManageTags = () => this.props.history.push('/manageTags');
 
     onManageMembers = () => this.props.history.push('/manageMembers');
+
+    canEditTask = () => this.props.selected ? this.props.selected._links.edit != null : false;
 
     canManageTasks = () => this.props.project ? this.props.project._links.manageTasks != null : false;
 
@@ -66,6 +70,14 @@ class ProjectPage extends Component {
                 </Col>
             </Row>
         ) : '';
+
+        const editTaskAction = this.canEditTask() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onEditTask}>Edit task</Button>
+                </Col>
+            </Row>
+        )  : '';
 
         const manageTagsAction = this.canManageTags() ? (
             <Row>
@@ -100,6 +112,7 @@ class ProjectPage extends Component {
                             <Col>{this.projectAuthor()}</Col>
                         </Row>
                         {newTaskAction}
+                        {editTaskAction}
                         {manageTagsAction}
                         {manageMembersAction}
                         <Row>
@@ -122,7 +135,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
-    {loadTasks, select},
+    {
+        loadTasks,
+        select,
+        newTask: startCreateNewTask,
+        editTask: startEditTask
+    },
     dispatch
 );
 

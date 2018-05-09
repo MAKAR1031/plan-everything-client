@@ -1,5 +1,6 @@
 import {baseUrlApi, authHeader} from "../api";
 import linkUtils from '../util/link-utils';
+import history from '../util/history';
 import alertify from "alertify.js";
 
 alertify.logPosition("bottom right");
@@ -22,6 +23,34 @@ export const select = (task) => dispatch => {
         type: 'TASK_SELECTED',
         task
     })
+};
+
+export const startCreateNewTask = () => dispatch => {
+    dispatch({
+        type: 'START_CREATE_NEW_TASK'
+    });
+    history.push('/editTask');
+};
+
+export const startEditTask = (task) => dispatch => {
+    dispatch({
+        type: 'START_EDIT_TASK'
+    });
+    history.push('/editTask');
+    const stepsUrl = linkUtils.linkUrl(task._links.steps);
+    const criteriaUrl = linkUtils.linkUrl(task._links.criteria);
+    baseUrlApi.get(stepsUrl, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_STEPS_LOADED',
+            steps: res.data
+        });
+    });
+    baseUrlApi.get(criteriaUrl, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_CRITERIA_LOADED',
+            criteria: res.data
+        });
+    });
 };
 
 export const createTask = (task, steps, criteria) => dispatch => {

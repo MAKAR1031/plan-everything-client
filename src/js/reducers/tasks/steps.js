@@ -1,14 +1,13 @@
 const initialState = null;
 
-export default function selected(state = initialState, action) {
+export default function steps(state = initialState, action) {
     switch (action.type) {
+        case 'TASK_STEPS_LOADED':
+            return action.steps;
         case 'TASK_SELECTED':
-            return action.task;
-        case 'PROJECT_SELECTED':
-        case 'START_CREATE_NEW_TASK':
         case 'LOGOUT':
             return initialState;
         default:
             return state;
     }
-};
+}
