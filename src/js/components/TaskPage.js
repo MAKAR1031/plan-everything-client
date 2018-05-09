@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Col, Container, Input, Progress, Row} from "reactstrap";
-import {Link} from "react-router-dom";
-import {startEditTask, loadUpdateInfo} from "../actions/tasks_actions";
+import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
+import {Link} from 'react-router-dom';
+import {startEditTask, loadUpdateInfo, deleteTask} from '../actions/tasks_actions';
 import moment from 'moment';
 import sort from '../util/sort_by_order';
+import alertify from 'alertify.js';
 
 class TaskPage extends Component {
 
@@ -51,7 +52,18 @@ class TaskPage extends Component {
 
     canEdit = () => this.props.selected ? this.props.selected._links.edit != null : false;
 
+    canDelete = () => this.props.selected ? this.props.selected._links.delete != null : false;
+
     onEdit = () => this.props.edit(this.props.selected);
+
+    onDelete = () => {
+        const task = this.props.selected;
+        alertify
+            .okBtn("Yes")
+            .cancelBtn("No")
+            .confirm(`Delete '${task.name}' task?`,
+                () => this.props.deleteTask(task));
+    };
 
     render() {
 
@@ -71,6 +83,14 @@ class TaskPage extends Component {
             <Row>
                 <Col>
                     <Button color='primary' onClick={this.onEdit}>Edit task</Button>
+                </Col>
+            </Row>
+        ) : '';
+
+        const deleteAction = this.canDelete() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onDelete}>Delete task</Button>
                 </Col>
             </Row>
         ) : '';
@@ -115,6 +135,7 @@ class TaskPage extends Component {
                             <Col>{this.taskAssignee()}</Col>
                         </Row>
                         {editAction}
+                        {deleteAction}
                         <Row>
                             <Col>
                                 <Link to='project'>Go back</Link>
@@ -136,6 +157,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => bindActionCreators(
     {
         edit: startEditTask,
+        deleteTask,
         loadUpdateInfo
     },
     dispatch

@@ -26,6 +26,15 @@ export default function tasks(state = initialState, action) {
                     }
                 }
             };
+        case 'TASK_DELETED':
+            return {
+                ...state,
+                ...{
+                    _embedded: {
+                        tasks: state._embedded.tasks.filter(t => t._links.self.href !== action.task._links.self.href)
+                    }
+                }
+            };
         case 'PROJECT_SELECTED':
         case 'LOGOUT':
             return initialState;

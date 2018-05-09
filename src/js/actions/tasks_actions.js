@@ -149,3 +149,15 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
         });
     }
 };
+
+export const deleteTask = (task) => dispatch => {
+    const url = linkUtils.linkUrl(task._links.delete);
+    baseUrlApi.delete(url, authHeader()).then(() => {
+        dispatch({
+            type: 'TASK_DELETED',
+            task
+        });
+        alertify.success('Task deleted');
+        history.push('/project');
+    });
+};
