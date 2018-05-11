@@ -10,7 +10,8 @@ import {
     completeStep,
     deleteTask,
     start,
-    openReportDialog
+    openReportDialog,
+    openEstimateDialog
 } from '../actions/tasks_actions';
 import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
@@ -18,6 +19,7 @@ import sort from '../util/sort_by_order';
 import alertify from 'alertify.js';
 import AssignTaskDialog from './AssignTaskDialog';
 import TaskStepReportDialog from './TaskStepReportDialog';
+import TaskEstimateDialog from './TaskEstimateDialog';
 import ReactMarkdown from 'react-markdown';
 
 class TaskPage extends Component {
@@ -48,9 +50,7 @@ class TaskPage extends Component {
     taskDescription = () => this.props.selected ? this.props.selected.description : '';
 
     updateInfo = (field) => this.props.updateInfo ? (
-        this.props.updateInfo[field] ?
-            moment(this.props.updateInfo[field]).format('DD.MM.YYYY hh:mm') :
-            '-'
+        this.props.updateInfo[field] ? moment(this.props.updateInfo[field]).format('DD.MM.YYYY hh:mm') : '-'
     ) : 'Loading...';
 
     stepList = () => this.props.steps ? this.props.steps._embedded.taskSteps.sort(sort) : [];
@@ -76,6 +76,8 @@ class TaskPage extends Component {
     canStart = () => this.props.selected ? this.props.selected._links.start != null : false;
 
     canComplete = (step) => step._links.complete != null;
+
+    canEstimate = () => this.props.selected ? this.props.selected._links.estimate != null : false;
 
     onEdit = () => this.props.edit(this.props.selected);
 
@@ -103,6 +105,8 @@ class TaskPage extends Component {
     onSaveReport = (step, report) => {
         this.props.completeStep(step, report);
     };
+
+    onEstimate = () => this.props.openEstimateDialog();
 
     render() {
 
@@ -151,6 +155,14 @@ class TaskPage extends Component {
             </Row>
         ) : '';
 
+        const estimateAction = this.canEstimate() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onEstimate}>Estimate task</Button>
+                </Col>
+            </Row>
+        ) : '';
+
         return (
             <Container fluid={true}>
                 <Row>
@@ -194,6 +206,7 @@ class TaskPage extends Component {
                         {deleteAction}
                         {assignAction}
                         {startAction}
+                        {estimateAction}
                         <Row>
                             <Col>
                                 <Link to='project'>Go back</Link>
@@ -203,6 +216,7 @@ class TaskPage extends Component {
                 </Row>
                 <AssignTaskDialog/>
                 <TaskStepReportDialog onSaveReportHandler={this.onSaveReport}/>
+                <TaskEstimateDialog/>
             </Container>
         );
     }
@@ -222,9 +236,10 @@ const mapDispatchToProps = dispatch => bindActionCreators(
         loadUpdateInfo,
         loadSteps,
         completeStep,
-        openAssignDialog,
         start,
-        openReportDialog
+        openAssignDialog,
+        openReportDialog,
+        openEstimateDialog
     },
     dispatch
 );

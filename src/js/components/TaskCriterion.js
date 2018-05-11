@@ -43,7 +43,7 @@ class TaskCriterion extends Component {
                                value={this.props.criterion.expectedValue.value}
                                invalid={this.props.criterion.expectedValue.isInvalid}
                                onChange={this.onChangeField}/>
-                        <FormFeedback>Expected vale is required</FormFeedback>
+                        <FormFeedback>Expected value is required</FormFeedback>
                     </FormGroup>
                 </Col>
             </Row>

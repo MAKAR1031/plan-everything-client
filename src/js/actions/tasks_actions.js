@@ -52,21 +52,25 @@ export const startEditTask = (task) => dispatch => {
     });
     history.push('/editTask');
     loadSteps(task)(dispatch);
-    const criteriaUrl = linkUtils.linkUrl(task._links.criteria);
-    baseUrlApi.get(criteriaUrl, authHeader()).then(res => {
+    loadCriteria(task)(dispatch);
+};
+
+export const loadSteps = (task) => dispatch => {
+    const url = linkUtils.linkUrl(task._links.steps);
+    baseUrlApi.get(url, authHeader()).then(res => {
         dispatch({
-            type: 'TASK_CRITERIA_LOADED',
-            criteria: res.data
+            type: 'TASK_STEPS_LOADED',
+            steps: res.data
         });
     });
 };
 
-export const loadSteps = (task) => dispatch => {
-    const stepsUrl = linkUtils.linkUrl(task._links.steps);
-    baseUrlApi.get(stepsUrl, authHeader()).then(res => {
+export const loadCriteria = (task) => dispatch => {
+    const url = linkUtils.linkUrl(task._links.criteria);
+    baseUrlApi.get(url, authHeader()).then(res => {
         dispatch({
-            type: 'TASK_STEPS_LOADED',
-            steps: res.data
+            type: 'TASK_CRITERIA_LOADED',
+            criteria: res.data
         });
     });
 };
@@ -225,5 +229,42 @@ export const openReportDialog = (step) => dispatch => {
 export const closeReportDialog = () => dispatch => {
     dispatch({
         type: 'TASK_STEP_REPORT_DIALOG_CLOSED'
+    });
+};
+
+export const openEstimateDialog = () => dispatch => {
+    dispatch({
+        type: 'TASK_ESTIMATE_DIALOG_OPENED'
+    });
+};
+
+export const closeEstimateDialog = () => dispatch => {
+    dispatch({
+        type: 'TASK_ESTIMATE_DIALOG_CLOSED'
+    });
+};
+
+export const estimateTask = (task, criteria) => dispatch => {
+    let counter = 0;
+    criteria.forEach(c => {
+        const url = linkUtils.linkUrl(c._links.self);
+        const data = {
+            actualValue: c.actualValue.value
+        };
+        baseUrlApi.patch(url, data, authHeader()).then(() => {
+            counter++;
+            if (counter === criteria.length) {
+                const estimateUrl = linkUtils.linkUrlWithProjection(task._links.estimate, 'full');
+                baseUrlApi.put(estimateUrl, {}, authHeader()).then(res => {
+                    dispatch({
+                        type: 'TASK_UPDATED',
+                        task: res.data
+                    });
+                    dispatch({
+                        type: 'TASK_ESTIMATE_DIALOG_CLOSED'
+                    });
+                });
+            }
+        });
     });
 };

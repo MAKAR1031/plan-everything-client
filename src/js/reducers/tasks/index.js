@@ -8,6 +8,7 @@ import criteria from './criteria';
 import updateInfo from './update_info';
 import assignDialog from './assign_dialog';
 import reportDialog from './step_report_dialog';
+import estimateDialog from './estimate_dialog';
 
 export default combineReducers({
     list,
@@ -17,5 +18,6 @@ export default combineReducers({
     criteria,
     updateInfo,
     assignDialog,
-    reportDialog
+    reportDialog,
+    estimateDialog
 });
