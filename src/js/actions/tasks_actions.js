@@ -268,3 +268,16 @@ export const estimateTask = (task, criteria) => dispatch => {
         });
     });
 };
+
+export const loadEvents = (task) => dispatch => {
+    const url = linkUtils.linkUrlWithProjection(task._links.events, 'withFullName');
+    baseUrlApi.get(url, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_EVENTS_LOADED',
+            events: res.data
+        });
+    }).catch(reason => {
+        alertify.error('Error while loading task events');
+        console.log('Error while loading task events: ', reason);
+    });
+};

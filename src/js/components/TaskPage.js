@@ -8,6 +8,7 @@ import {
     loadUpdateInfo,
     loadSteps,
     loadCriteria,
+    loadEvents,
     completeStep,
     deleteTask,
     start,
@@ -44,6 +45,9 @@ class TaskPage extends Component {
             if (!this.props.criteria) {
                 this.props.loadCriteria(this.props.selected);
             }
+            if (!this.props.criteria) {
+                this.props.loadEvents(this.props.selected);
+            }
         }
     };
 
@@ -60,6 +64,8 @@ class TaskPage extends Component {
     stepList = () => this.props.steps ? this.props.steps._embedded.taskSteps.sort(sort) : [];
 
     criteriaList = () => this.props.criteria ? this.props.criteria._embedded.criteria.sort(sort) : [];
+
+    eventsList = () => this.props.events ? this.props.events._embedded.taskEvents : [];
 
     stepsCompleted = () => this.stepList().filter(s => s.completed).length;
 
@@ -156,6 +162,20 @@ class TaskPage extends Component {
             </Row>
         ));
 
+        const eventsList = this.eventsList().map(event => (
+            <Row key={event.name} className='pl-3 mb-2'>
+                <Col>
+                    <h6>{event.time}</h6>
+                </Col>
+                <Col>
+                    <h6>{event.name}</h6>
+                </Col>
+                <Col>
+                    <h6>{event.fullName}</h6>
+                </Col>
+            </Row>
+        ));
+
         const editAction = this.canEdit() ? (
             <Row>
                 <Col>
@@ -224,6 +244,10 @@ class TaskPage extends Component {
                                 <Container className='mt-4'>
                                     {criteriaList}
                                 </Container>
+                                <h5>History</h5>
+                                <Container className='mt-4'>
+                                    {eventsList}
+                                </Container>
                             </Container>
                         </Container>
                     </Col>
@@ -269,9 +293,10 @@ class TaskPage extends Component {
 const mapStateToProps = state => ({
     project: state.currentProject,
     selected: state.tasks.selected,
+    updateInfo: state.tasks.updateInfo,
     steps: state.tasks.steps,
     criteria: state.tasks.criteria,
-    updateInfo: state.tasks.updateInfo,
+    events: state.tasks.events
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
@@ -281,6 +306,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
         loadUpdateInfo,
         loadSteps,
         loadCriteria,
+        loadEvents,
         completeStep,
         start,
         openAssignDialog,
