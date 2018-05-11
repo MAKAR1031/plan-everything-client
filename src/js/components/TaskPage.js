@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {startEditTask, loadUpdateInfo, loadSteps, deleteTask, start} from '../actions/tasks_actions';
+import {startEditTask, loadUpdateInfo, loadSteps, completeStep, deleteTask, start} from '../actions/tasks_actions';
 import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
 import sort from '../util/sort_by_order';
@@ -45,9 +45,9 @@ class TaskPage extends Component {
 
     stepList = () => this.props.steps ? this.props.steps._embedded.taskSteps.sort(sort) : [];
 
-    stepsCompleted = () => this.props.selected ? this.props.selected.steps.filter(s => s.completed).length : 0;
+    stepsCompleted = () => this.stepList().filter(s => s.completed).length;
 
-    stepsTotal = () => this.props.selected ? this.props.selected.steps.length : 0;
+    stepsTotal = () => this.stepList().length;
 
     taskStatus = () => this.props.selected ? this.props.selected.status : '';
 
@@ -82,6 +82,14 @@ class TaskPage extends Component {
 
     onStart = () => this.props.start(this.props.selected);
 
+    onStepComplete = (step) => {
+        if (step.needReport) {
+            alertify.log('Report needed');
+            return;
+        }
+        this.props.completeStep(step, null);
+    };
+
     render() {
 
         const stepList = this.stepList().map(step => (
@@ -90,7 +98,8 @@ class TaskPage extends Component {
                     <Input
                         type='checkbox'
                         checked={step.completed}
-                        disabled={step.completed || !this.canComplete(step)}/>
+                        disabled={step.completed || !this.canComplete(step)}
+                        onChange={() => this.onStepComplete(step)}/>
                     <h6>{step.name}</h6>
                 </Col>
             </Row>
@@ -195,8 +204,9 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     {
         edit: startEditTask,
         deleteTask,
-        loadSteps,
         loadUpdateInfo,
+        loadSteps,
+        completeStep,
         openAssignDialog,
         start
     },

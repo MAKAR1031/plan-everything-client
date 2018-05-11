@@ -199,3 +199,17 @@ export const start = (task) => dispatch => {
         alertify.success('Task started');
     });
 };
+
+export const completeStep = (step, report) => dispatch => {
+    const url = linkUtils.linkUrl(step._links.complete);
+    baseUrlApi.put(url, report ? report : '', authHeader()).then(res => {
+        const taskUrl = linkUtils.linkUrlWithProjection(res.data._links.task, 'full');
+        baseUrlApi.get(taskUrl, authHeader()).then(res => {
+            dispatch({
+                type: 'TASK_UPDATED',
+                task: res.data
+            });
+            alertify.success(`Step ${step.name} completed`);
+        });
+    });
+};
