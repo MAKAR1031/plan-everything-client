@@ -18,6 +18,7 @@ import sort from '../util/sort_by_order';
 import alertify from 'alertify.js';
 import AssignTaskDialog from './AssignTaskDialog';
 import TaskStepReportDialog from './TaskStepReportDialog';
+import ReactMarkdown from 'react-markdown';
 
 class TaskPage extends Component {
 
@@ -157,7 +158,7 @@ class TaskPage extends Component {
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>{this.projectName()} - {this.taskName()}</h2>
                             <Container className='mb-4'>
-                                <h4 className='text-muted'>{this.taskDescription()}</h4>
+                                <ReactMarkdown source={this.taskDescription()}/>
                             </Container>
                             <Container className='mb-4 p-3'>
                                 <h5>Steps</h5>
