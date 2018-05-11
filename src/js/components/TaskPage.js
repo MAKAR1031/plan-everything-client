@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
+import {Button, Container, Row, Col, Input, Progress, Badge} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {
     startEditTask,
@@ -169,6 +169,13 @@ class TaskPage extends Component {
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>{this.projectName()} - {this.taskName()}</h2>
+                            <Container className='mb-3'>
+                                {this.props.selected.tags.map(tag => (
+                                    <Badge className='mr-2' style={{backgroundColor: '#' + tag.color}}>
+                                        {tag.name}
+                                    </Badge>
+                                ))}
+                            </Container>
                             <Container className='mb-4'>
                                 <ReactMarkdown source={this.taskDescription()}/>
                             </Container>

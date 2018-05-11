@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
+import {Button, Card, CardBody, Container, Row, Col, Badge} from 'reactstrap';
 import {Link} from "react-router-dom";
 import {loadTasks, select, open, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 
@@ -59,7 +59,20 @@ class ProjectPage extends Component {
                   key={task._links.self.href} onClick={() => this.onSelect(task)}>
                 <CardBody>
                     <Row>
-                        <Col>{task.name}</Col>
+                        <Col>
+                            <Row>
+                                <Col>{task.name}</Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    {task.tags.map(tag => (
+                                        <Badge className='mr-2' style={{backgroundColor: '#' + tag.color}}>
+                                            {tag.name}
+                                        </Badge>
+                                    ))}
+                                </Col>
+                            </Row>
+                        </Col>
                         <Col>{task.status}</Col>
                     </Row>
                 </CardBody>
@@ -88,7 +101,7 @@ class ProjectPage extends Component {
                     <Button color='primary' onClick={this.onEditTask}>Edit task</Button>
                 </Col>
             </Row>
-        )  : '';
+        ) : '';
 
         const manageTagsAction = this.canManageTags() ? (
             <Row>
