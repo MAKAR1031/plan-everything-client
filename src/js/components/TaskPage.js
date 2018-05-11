@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {startEditTask, loadUpdateInfo, deleteTask, start} from '../actions/tasks_actions';
+import {startEditTask, loadUpdateInfo, loadSteps, deleteTask, start} from '../actions/tasks_actions';
 import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
 import sort from '../util/sort_by_order';
@@ -13,16 +13,21 @@ import AssignTaskDialog from './AssignTaskDialog';
 class TaskPage extends Component {
 
     componentDidMount() {
-        this.checkAndLoadUpdateInfo();
+        this.checkAndLoadData();
     }
 
     componentDidUpdate() {
-        this.checkAndLoadUpdateInfo();
+        this.checkAndLoadData();
     }
 
-    checkAndLoadUpdateInfo = () => {
-        if (!this.props.updateInfo && this.props.selected) {
-            this.props.loadUpdateInfo(this.props.selected);
+    checkAndLoadData = () => {
+        if (this.props.selected) {
+            if (!this.props.updateInfo) {
+                this.props.loadUpdateInfo(this.props.selected);
+            }
+            if (!this.props.steps) {
+                this.props.loadSteps(this.props.selected);
+            }
         }
     };
 
@@ -38,7 +43,7 @@ class TaskPage extends Component {
             '-'
     ) : 'Loading...';
 
-    stepList = () => this.props.selected ? this.props.selected.steps.sort(sort) : [];
+    stepList = () => this.props.steps ? this.props.steps._embedded.taskSteps.sort(sort) : [];
 
     stepsCompleted = () => this.props.selected ? this.props.selected.steps.filter(s => s.completed).length : 0;
 
@@ -59,6 +64,8 @@ class TaskPage extends Component {
     canAssign = () => this.props.selected ? this.props.selected._links.assign != null : false;
 
     canStart = () => this.props.selected ? this.props.selected._links.start != null : false;
+
+    canComplete = (step) => step._links.complete != null;
 
     onEdit = () => this.props.edit(this.props.selected);
 
@@ -83,7 +90,7 @@ class TaskPage extends Component {
                     <Input
                         type='checkbox'
                         checked={step.completed}
-                        disabled={step.completed}/>
+                        disabled={step.completed || !this.canComplete(step)}/>
                     <h6>{step.name}</h6>
                 </Col>
             </Row>
@@ -180,6 +187,7 @@ class TaskPage extends Component {
 const mapStateToProps = state => ({
     project: state.currentProject,
     selected: state.tasks.selected,
+    steps: state.tasks.steps,
     updateInfo: state.tasks.updateInfo
 });
 
@@ -187,6 +195,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
     {
         edit: startEditTask,
         deleteTask,
+        loadSteps,
         loadUpdateInfo,
         openAssignDialog,
         start

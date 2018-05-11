@@ -51,18 +51,22 @@ export const startEditTask = (task) => dispatch => {
         type: 'START_EDIT_TASK'
     });
     history.push('/editTask');
-    const stepsUrl = linkUtils.linkUrl(task._links.steps);
+    loadSteps(task)(dispatch);
     const criteriaUrl = linkUtils.linkUrl(task._links.criteria);
-    baseUrlApi.get(stepsUrl, authHeader()).then(res => {
-        dispatch({
-            type: 'TASK_STEPS_LOADED',
-            steps: res.data
-        });
-    });
     baseUrlApi.get(criteriaUrl, authHeader()).then(res => {
         dispatch({
             type: 'TASK_CRITERIA_LOADED',
             criteria: res.data
+        });
+    });
+};
+
+export const loadSteps = (task) => dispatch => {
+    const stepsUrl = linkUtils.linkUrl(task._links.steps);
+    baseUrlApi.get(stepsUrl, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_STEPS_LOADED',
+            steps: res.data
         });
     });
 };
