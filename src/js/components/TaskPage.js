@@ -7,6 +7,7 @@ import {
     startEditTask,
     loadUpdateInfo,
     loadSteps,
+    loadCriteria,
     completeStep,
     deleteTask,
     start,
@@ -40,6 +41,9 @@ class TaskPage extends Component {
             if (!this.props.steps) {
                 this.props.loadSteps(this.props.selected);
             }
+            if (!this.props.criteria) {
+                this.props.loadCriteria(this.props.selected);
+            }
         }
     };
 
@@ -54,6 +58,8 @@ class TaskPage extends Component {
     ) : 'Loading...';
 
     stepList = () => this.props.steps ? this.props.steps._embedded.taskSteps.sort(sort) : [];
+
+    criteriaList = () => this.props.criteria ? this.props.criteria._embedded.criteria.sort(sort) : [];
 
     stepsCompleted = () => this.stepList().filter(s => s.completed).length;
 
@@ -108,6 +114,13 @@ class TaskPage extends Component {
 
     onEstimate = () => this.props.openEstimateDialog();
 
+    actualValueStyle = criterion => {
+        const {expectedValue, actualValue} = criterion;
+        return {
+            color: actualValue >= expectedValue ? '#00CC00' : '#FF0033'
+        }
+    };
+
     render() {
 
         const stepList = this.stepList().map(step => (
@@ -119,6 +132,26 @@ class TaskPage extends Component {
                         disabled={step.completed || !this.canComplete(step)}
                         onChange={() => this.onStepComplete(step)}/>
                     <h6>{step.name}</h6>
+                </Col>
+            </Row>
+        ));
+
+        const criteriaList = this.criteriaList().map(criterion => (
+            <Row key={criterion.name} className='pl-3 mb-2'>
+                <Col sm={4}>
+                    <h6>{criterion.name}</h6>
+                </Col>
+                <Col sm={2}>
+                    <h6>{criterion.expectedValue}</h6>
+                </Col>
+                <Col sm={2}>
+                    {criterion.actualValue ? (
+                        <h6 style={this.actualValueStyle(criterion)}>
+                            {criterion.actualValue}
+                        </h6>
+                    ) : (
+                        <h6>-</h6>
+                    )}
                 </Col>
             </Row>
         ));
@@ -187,6 +220,10 @@ class TaskPage extends Component {
                                 <Container className='mt-4'>
                                     {stepList}
                                 </Container>
+                                <h5>Criteria</h5>
+                                <Container className='mt-4'>
+                                    {criteriaList}
+                                </Container>
                             </Container>
                         </Container>
                     </Col>
@@ -233,6 +270,7 @@ const mapStateToProps = state => ({
     project: state.currentProject,
     selected: state.tasks.selected,
     steps: state.tasks.steps,
+    criteria: state.tasks.criteria,
     updateInfo: state.tasks.updateInfo,
 });
 
@@ -242,6 +280,7 @@ const mapDispatchToProps = dispatch => bindActionCreators(
         deleteTask,
         loadUpdateInfo,
         loadSteps,
+        loadCriteria,
         completeStep,
         start,
         openAssignDialog,
