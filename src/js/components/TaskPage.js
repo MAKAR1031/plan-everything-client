@@ -3,12 +3,21 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Col, Container, Input, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {startEditTask, loadUpdateInfo, loadSteps, completeStep, deleteTask, start} from '../actions/tasks_actions';
+import {
+    startEditTask,
+    loadUpdateInfo,
+    loadSteps,
+    completeStep,
+    deleteTask,
+    start,
+    openReportDialog
+} from '../actions/tasks_actions';
 import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
 import sort from '../util/sort_by_order';
 import alertify from 'alertify.js';
 import AssignTaskDialog from './AssignTaskDialog';
+import TaskStepReportDialog from './TaskStepReportDialog';
 
 class TaskPage extends Component {
 
@@ -84,10 +93,14 @@ class TaskPage extends Component {
 
     onStepComplete = (step) => {
         if (step.needReport) {
-            alertify.log('Report needed');
+            this.props.openReportDialog(step);
             return;
         }
         this.props.completeStep(step, null);
+    };
+
+    onSaveReport = (step, report) => {
+        this.props.completeStep(step, report);
     };
 
     render() {
@@ -188,6 +201,7 @@ class TaskPage extends Component {
                     </Col>
                 </Row>
                 <AssignTaskDialog/>
+                <TaskStepReportDialog onSaveReportHandler={this.onSaveReport}/>
             </Container>
         );
     }
@@ -197,7 +211,7 @@ const mapStateToProps = state => ({
     project: state.currentProject,
     selected: state.tasks.selected,
     steps: state.tasks.steps,
-    updateInfo: state.tasks.updateInfo
+    updateInfo: state.tasks.updateInfo,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators(
@@ -208,7 +222,8 @@ const mapDispatchToProps = dispatch => bindActionCreators(
         loadSteps,
         completeStep,
         openAssignDialog,
-        start
+        start,
+        openReportDialog
     },
     dispatch
 );

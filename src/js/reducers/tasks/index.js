@@ -7,6 +7,7 @@ import steps from './steps';
 import criteria from './criteria';
 import updateInfo from './update_info';
 import assignDialog from './assign_dialog';
+import reportDialog from './step_report_dialog';
 
 export default combineReducers({
     list,
@@ -15,5 +16,6 @@ export default combineReducers({
     steps,
     criteria,
     updateInfo,
-    assignDialog
+    assignDialog,
+    reportDialog
 });

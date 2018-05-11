@@ -202,7 +202,8 @@ export const start = (task) => dispatch => {
 
 export const completeStep = (step, report) => dispatch => {
     const url = linkUtils.linkUrl(step._links.complete);
-    baseUrlApi.put(url, report ? report : '', authHeader()).then(res => {
+    const data = report ? JSON.stringify(report) : '';
+    baseUrlApi.put(url, data, authHeader()).then(res => {
         const taskUrl = linkUtils.linkUrlWithProjection(res.data._links.task, 'full');
         baseUrlApi.get(taskUrl, authHeader()).then(res => {
             dispatch({
@@ -211,5 +212,18 @@ export const completeStep = (step, report) => dispatch => {
             });
             alertify.success(`Step ${step.name} completed`);
         });
+    });
+};
+
+export const openReportDialog = (step) => dispatch => {
+    dispatch({
+        type: 'TASK_STEP_REPORT_DIALOG_OPENED',
+        step
+    });
+};
+
+export const closeReportDialog = () => dispatch => {
+    dispatch({
+        type: 'TASK_STEP_REPORT_DIALOG_CLOSED'
     });
 };
