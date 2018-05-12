@@ -1,5 +1,6 @@
 import {api, baseUrlApi, authHeader} from '../api'
 import linkUtils from '../util/link-utils';
+import history from '../util/history';
 
 export const load = () => dispatch => {
     baseUrlApi.get('/projects/search/my', authHeader()).then(res => {
@@ -42,5 +43,6 @@ export const selectProject = (project) => dispatch => {
     dispatch({
         type: 'PROJECT_SELECTED',
         project
-    })
+    });
+    history.push('/project');
 };

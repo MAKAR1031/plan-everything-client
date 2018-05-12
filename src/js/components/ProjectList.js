@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import NewProjectDialog from './NewProjectDialog';
 import {getAuthor, getCurrentMember, load, selectProject} from '../actions/projects_actions'
 import {open as openDialog} from '../actions/new_project_dialog_actions';
-import {Container} from "reactstrap";
+import {Card, CardBody, Col, Container, Row} from "reactstrap";
 
 class ProjectList extends Component {
 
@@ -17,7 +17,7 @@ class ProjectList extends Component {
     }
 
     checkAndLoadProjects() {
-        if (this.props.projects == null) {
+        if (!this.props.projects) {
             this.props.load();
         }
     }
@@ -42,25 +42,22 @@ class ProjectList extends Component {
         }
     };
 
-    onSelect = (project) => {
-        this.props.selectProject(project);
-        this.props.history.push('/project');
-    };
+    onSelect = (project) => this.props.selectProject(project);
 
     render() {
         const projectList = this.projectsList() ? this.projectsList().map((project) => (
-            <div className='card selectable-item mb-3' key={project.name} onClick={() => this.onSelect(project)}>
-                <div className='card-body'>
-                    <div className='row'>
-                        <div className="col-3"><strong>{project.name}</strong></div>
-                        <div className="col-3">{project.createDate}</div>
-                        <div className="col-3">{this.author(project)}</div>
-                        <div className="col-3">{this.myMemberRole(project)}</div>
-                    </div>
-                </div>
-            </div>
+            <Card className='selectable-item mb-3' key={project.name} onClick={() => this.onSelect(project)}>
+                <CardBody>
+                    <Row>
+                        <Col><strong>{project.name}</strong></Col>
+                        <Col>{project.createDate}</Col>
+                        <Col>{this.author(project)}</Col>
+                        <Col>{this.myMemberRole(project)}</Col>
+                    </Row>
+                </CardBody>
+            </Card>
         )) : (
-            <div>loading...</div>
+            <Container>loading...</Container>
         );
 
         return (

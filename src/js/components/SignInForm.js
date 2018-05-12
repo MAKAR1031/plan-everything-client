@@ -26,7 +26,7 @@ class SignInForm extends Component {
     }
 
     checkAuthorizationAndRedirect() {
-        if (this.props.isAuthorized && this.props.account && this.props.account.role) {
+        if (this.props.isAuthorized && this.props.account) {
             if (this.props.account.role.code === 'ADMIN') {
                 this.props.history.push('/manageAccounts');
             } else {
