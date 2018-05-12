@@ -16,9 +16,14 @@
     font-size: 1.2em;
 }
 
-.left-menu>.row,
-.right-menu>.row {
+.left-menu > .row,
+.right-menu > .row {
     margin-bottom: 5px;
+}
+
+.left-menu > .row button,
+.right-menu > .row button {
+    width: 90%;
 }
 
 .selectable-item {
