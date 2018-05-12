@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {Button, Card, CardBody, Container, Row, Col, Badge} from 'reactstrap';
 import {Link} from "react-router-dom";
 import {loadTasks, select, open, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
+import ReactMarkdown from 'react-markdown';
 
 class ProjectPage extends Component {
 
@@ -128,7 +129,7 @@ class ProjectPage extends Component {
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
                             <Container className='mb-4'>
-                                <h4 className='text-muted'>{this.projectDescription()}</h4>
+                                <ReactMarkdown source={this.projectDescription()}/>
                             </Container>
                             {list}
                         </Container>
