@@ -10,6 +10,7 @@ import events from './events';
 import assignDialog from './assign_dialog';
 import reportDialog from './step_report_dialog';
 import estimateDialog from './estimate_dialog';
+import editTagsDialog from './edit_tags_dialog';
 
 export default combineReducers({
     list,
@@ -21,5 +22,6 @@ export default combineReducers({
     events,
     assignDialog,
     reportDialog,
-    estimateDialog
+    estimateDialog,
+    editTagsDialog
 });

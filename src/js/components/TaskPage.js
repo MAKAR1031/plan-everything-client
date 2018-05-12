@@ -13,7 +13,8 @@ import {
     deleteTask,
     start,
     openReportDialog,
-    openEstimateDialog
+    openEstimateDialog,
+    openEditTagsDialog
 } from '../actions/tasks_actions';
 import {openAssignDialog} from "../actions/tasks_actions";
 import moment from 'moment';
@@ -22,6 +23,7 @@ import alertify from 'alertify.js';
 import AssignTaskDialog from './AssignTaskDialog';
 import TaskStepReportDialog from './TaskStepReportDialog';
 import TaskEstimateDialog from './TaskEstimateDialog';
+import EditTaskTagsDialog from './EditTaskTagsDialog';
 import ReactMarkdown from 'react-markdown';
 
 class TaskPage extends Component {
@@ -92,6 +94,8 @@ class TaskPage extends Component {
     canEstimate = () => this.props.selected ? this.props.selected._links.estimate != null : false;
 
     onEdit = () => this.props.edit(this.props.selected);
+
+    onEditTags = () => this.props.openEditTagsDialog();
 
     onDelete = () => {
         const task = this.props.selected;
@@ -184,6 +188,14 @@ class TaskPage extends Component {
             </Row>
         ) : '';
 
+        const editTagsAction = this.canEdit() ? (
+            <Row>
+                <Col>
+                    <Button color='primary' onClick={this.onEditTags}>Edit tags</Button>
+                </Col>
+            </Row>
+        ) : '';
+
         const deleteAction = this.canDelete() ? (
             <Row>
                 <Col>
@@ -271,6 +283,7 @@ class TaskPage extends Component {
                             <Col>{this.taskAssignee()}</Col>
                         </Row>
                         {editAction}
+                        {editTagsAction}
                         {deleteAction}
                         {assignAction}
                         {startAction}
@@ -285,6 +298,7 @@ class TaskPage extends Component {
                 <AssignTaskDialog/>
                 <TaskStepReportDialog onSaveReportHandler={this.onSaveReport}/>
                 <TaskEstimateDialog/>
+                <EditTaskTagsDialog/>
             </Container>
         );
     }
@@ -311,7 +325,8 @@ const mapDispatchToProps = dispatch => bindActionCreators(
         start,
         openAssignDialog,
         openReportDialog,
-        openEstimateDialog
+        openEstimateDialog,
+        openEditTagsDialog
     },
     dispatch
 );

@@ -281,3 +281,22 @@ export const loadEvents = (task) => dispatch => {
         console.log('Error while loading task events: ', reason);
     });
 };
+
+export const openEditTagsDialog = () => dispatch => {
+    dispatch({
+        type: 'TASK_EDIT_TAGS_DIALOG_OPENED',
+    });
+};
+
+export const closeEditTagsDialog = () => dispatch => {
+    dispatch({
+        type: 'TASK_EDIT_TAGS_DIALOG_CLOSED'
+    });
+};
+
+export const updateTags = (task, tags) => dispatch => {
+    alertify.success('Tags updated (no)');
+    dispatch({
+        type: 'TASK_EDIT_TAGS_DIALOG_CLOSED'
+    });
+};
