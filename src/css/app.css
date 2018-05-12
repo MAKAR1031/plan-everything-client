@@ -38,3 +38,8 @@
 input[type='color'].form-control {
     padding: 2px 5px;
 }
+
+.tags-container {
+    max-height: 250px;
+    overflow: auto;
+}

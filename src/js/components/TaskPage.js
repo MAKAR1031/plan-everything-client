@@ -47,7 +47,7 @@ class TaskPage extends Component {
             if (!this.props.criteria) {
                 this.props.loadCriteria(this.props.selected);
             }
-            if (!this.props.criteria) {
+            if (!this.props.events) {
                 this.props.loadEvents(this.props.selected);
             }
         }
@@ -62,6 +62,8 @@ class TaskPage extends Component {
     updateInfo = (field) => this.props.updateInfo ? (
         this.props.updateInfo[field] ? moment(this.props.updateInfo[field]).format('DD.MM.YYYY hh:mm') : '-'
     ) : 'Loading...';
+
+    tagsList = () => this.props.selected ? this.props.selected.tags : [];
 
     stepList = () => this.props.steps ? this.props.steps._embedded.taskSteps.sort(sort) : [];
 
@@ -132,6 +134,11 @@ class TaskPage extends Component {
     };
 
     render() {
+        const tagsList = this.tagsList().map(tag => (
+            <Badge key={tag.name} className='mr-2' style={{backgroundColor: '#' + tag.color}}>
+                {tag.name}
+            </Badge>
+        ));
 
         const stepList = this.stepList().map(step => (
             <Row key={step.name} className='pl-3 mb-2'>
@@ -235,11 +242,7 @@ class TaskPage extends Component {
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>{this.projectName()} - {this.taskName()}</h2>
                             <Container className='mb-3'>
-                                {this.props.selected.tags.map(tag => (
-                                    <Badge key={tag.name} className='mr-2' style={{backgroundColor: '#' + tag.color}}>
-                                        {tag.name}
-                                    </Badge>
-                                ))}
+                                {tagsList}
                             </Container>
                             <Container className='mb-4'>
                                 <ReactMarkdown source={this.taskDescription()}/>

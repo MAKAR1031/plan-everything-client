@@ -294,9 +294,38 @@ export const closeEditTagsDialog = () => dispatch => {
     });
 };
 
+export const loadTags = (task) => dispatch => {
+    const url = linkUtils.linkUrl(task._links.tags);
+    baseUrlApi.get(url, authHeader()).then(res => {
+        dispatch({
+            type: 'TASK_TAGS_LOADED',
+            tags: res.data
+        });
+    }).catch(reason => {
+        alertify.error('Error while loading task tags');
+        console.log('Error while loading task tags: ', reason);
+    });
+};
+
 export const updateTags = (task, tags) => dispatch => {
-    alertify.success('Tags updated (no)');
-    dispatch({
-        type: 'TASK_EDIT_TAGS_DIALOG_CLOSED'
+    const url = linkUtils.linkUrl(task._links.self);
+    const data = {
+        tags: tags.map(t => linkUtils.linkUrl(t._links.self))
+    };
+    baseUrlApi.patch(url, data, authHeader()).then(() => {
+        const taskUrl = linkUtils.linkUrlWithProjection(task._links.self, 'full');
+        baseUrlApi.get(taskUrl, authHeader()).then(res => {
+            dispatch({
+                type: 'TASK_UPDATED',
+                task: res.data
+            });
+            dispatch({
+                type: 'TASK_EDIT_TAGS_DIALOG_CLOSED'
+            });
+            alertify.success('Tags updated');
+        });
+    }).catch(reason => {
+        alertify.error('Error while loading updating tags');
+        console.log('Error while loading updating tags: ', reason);
     });
 };
