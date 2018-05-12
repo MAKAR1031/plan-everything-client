@@ -1,6 +1,6 @@
 .idea
 node_modules
-dist
+dist/*
 !dist/index.html
 src/js/api/config.json
 *.iml
