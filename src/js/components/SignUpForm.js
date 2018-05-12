@@ -4,9 +4,9 @@ import {connect} from 'react-redux';
 import {signUp, resetSignUpStatus} from '../actions/auth_actions';
 import alertify from 'alertify.js';
 import {Container, Row, Col, FormGroup, Label, Input, FormFeedback, Button} from 'reactstrap';
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 
-alertify.logPosition("bottom right");
+alertify.logPosition('bottom right');
 
 class SignUpForm extends Component {
     state = {
@@ -46,15 +46,10 @@ class SignUpForm extends Component {
         }
     }
 
-    onFirstNameChange = e => this.setState({firstName: {value: e.target.value, isInvalid: false}});
-
-    onLastNameChange = e => this.setState({lastName: {value: e.target.value, isInvalid: false}});
-
-    onLoginChange = e => this.setState({login: {value: e.target.value, isInvalid: false}});
-
-    onPasswordChange = e => this.setState({password: {value: e.target.value, isInvalid: false}});
-
-    onEmailChange = e => this.setState({email: {value: e.target.value, isInvalid: false}});
+    onChangeField = e => {
+        const {name, value} = e.target;
+        this.setState({[name]: {value, isInvalid: false}});
+    };
 
     onSignUp = () => {
         let valid = true;
@@ -104,67 +99,72 @@ class SignUpForm extends Component {
                         <h2 className='text-center mt-2 mb-3'>Sign Up</h2>
                         <Container className='border p-3 w-50'>
                             <FormGroup row>
-                                <Label for="firstName" sm={2}>First name</Label>
+                                <Label for='firstName' sm={2}>First name</Label>
                                 <Col sm={10}>
-                                    <Input id="firstName"
-                                           type="text"
-                                           placeholder="First name"
+                                    <Input id='firstName'
+                                           name='firstName'
+                                           type='text'
+                                           placeholder='First name'
                                            value={this.state.firstName.value}
                                            invalid={this.state.firstName.isInvalid}
-                                           onChange={this.onFirstNameChange}/>
+                                           onChange={this.onChangeField}/>
                                     <FormFeedback>Value is required</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="lastName" sm={2}>Last name</Label>
+                                <Label for='lastName' sm={2}>Last name</Label>
                                 <Col sm={10}>
-                                    <Input id="lastName"
-                                           type="text"
-                                           placeholder="Last name"
+                                    <Input id='lastName'
+                                           name='lastName'
+                                           type='text'
+                                           placeholder='Last name'
                                            value={this.state.lastName.value}
                                            invalid={this.state.lastName.isInvalid}
-                                           onChange={this.onLastNameChange}/>
+                                           onChange={this.onChangeField}/>
                                     <FormFeedback>Value is required</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="login" sm={2}>Login</Label>
+                                <Label for='login' sm={2}>Login</Label>
                                 <Col sm={10}>
-                                    <Input id="login"
-                                           type="text"
-                                           placeholder="Login"
+                                    <Input id='login'
+                                           name='login'
+                                           type='text'
+                                           placeholder='Login'
                                            value={this.state.login.value}
                                            invalid={this.state.login.isInvalid}
-                                           onChange={this.onLoginChange}/>
+                                           onChange={this.onChangeField}/>
                                     <FormFeedback>Value is required</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="password" sm={2}>Password</Label>
+                                <Label for='password' sm={2}>Password</Label>
                                 <Col sm={10}>
-                                    <Input id="password"
-                                           type="password"
-                                           placeholder="Password"
+                                    <Input id='password'
+                                           name='password'
+                                           type='password'
+                                           placeholder='Password'
                                            value={this.state.password.value}
                                            invalid={this.state.password.isInvalid}
-                                           onChange={this.onPasswordChange}/>
+                                           onChange={this.onChangeField}/>
                                     <FormFeedback>Value is required</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="email" sm={2}>Email</Label>
+                                <Label for='email' sm={2}>Email</Label>
                                 <Col sm={10}>
-                                    <Input id="email"
-                                           type="email"
-                                           placeholder="Email"
+                                    <Input id='email'
+                                           name='email'
+                                           type='email'
+                                           placeholder='Email'
                                            value={this.state.email.value}
                                            invalid={this.state.email.isInvalid}
-                                           onChange={this.onEmailChange}/>
+                                           onChange={this.onChangeField}/>
                                     <FormFeedback>Value is required</FormFeedback>
                                 </Col>
                             </FormGroup>
                             <Container className='text-center'>
-                                <Button color="primary" onClick={this.onSignUp}>Sign Up</Button>
+                                <Button color='primary' onClick={this.onSignUp}>Sign Up</Button>
                             </Container>
                         </Container>
                     </Col>
