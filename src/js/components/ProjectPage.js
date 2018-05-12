@@ -66,7 +66,8 @@ class ProjectPage extends Component {
                             <Row>
                                 <Col>
                                     {task.tags.map(tag => (
-                                        <Badge key={tag.name} className='mr-2' style={{backgroundColor: '#' + tag.color}}>
+                                        <Badge key={tag.name} className='mr-2'
+                                               style={{backgroundColor: '#' + tag.color}}>
                                             {tag.name}
                                         </Badge>
                                     ))}
@@ -124,11 +125,13 @@ class ProjectPage extends Component {
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
-                        <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
-                        <Container className='mb-4'>
-                            <h4 className='text-muted'>{this.projectDescription()}</h4>
+                        <Container fluid={true} className='main-container'>
+                            <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
+                            <Container className='mb-4'>
+                                <h4 className='text-muted'>{this.projectDescription()}</h4>
+                            </Container>
+                            {list}
                         </Container>
-                        {list}
                     </Col>
                     <Col sm={2} className='right-menu'>
                         <Row>
