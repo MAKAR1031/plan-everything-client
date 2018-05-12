@@ -66,7 +66,7 @@ class ProjectPage extends Component {
                             <Row>
                                 <Col>
                                     {task.tags.map(tag => (
-                                        <Badge className='mr-2' style={{backgroundColor: '#' + tag.color}}>
+                                        <Badge key={tag.name} className='mr-2' style={{backgroundColor: '#' + tag.color}}>
                                             {tag.name}
                                         </Badge>
                                     ))}

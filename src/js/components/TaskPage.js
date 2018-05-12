@@ -163,7 +163,7 @@ class TaskPage extends Component {
         ));
 
         const eventsList = this.eventsList().map(event => (
-            <Row key={event.name} className='pl-3 mb-2'>
+            <Row key={event.time} className='pl-3 mb-2'>
                 <Col>
                     <h6>{event.time}</h6>
                 </Col>
@@ -224,7 +224,7 @@ class TaskPage extends Component {
                             <h2 className='text-center mt-2 mb-3'>{this.projectName()} - {this.taskName()}</h2>
                             <Container className='mb-3'>
                                 {this.props.selected.tags.map(tag => (
-                                    <Badge className='mr-2' style={{backgroundColor: '#' + tag.color}}>
+                                    <Badge key={tag.name} className='mr-2' style={{backgroundColor: '#' + tag.color}}>
                                         {tag.name}
                                     </Badge>
                                 ))}
