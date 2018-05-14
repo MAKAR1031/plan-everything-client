@@ -87,11 +87,14 @@ class SignUpForm extends Component {
             <Container fluid={true}>
                 <Row>
                     <Col sm={2} className='left-menu'>
-                        <Row>
-                            <Col>
-                                <Link to='/'>Go back</Link>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'/>
+                        <Container className='actions-container'>
+                            <Row>
+                                <Col>
+                                    <Link to='/'>Go back</Link>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                     <Col sm={10}>
                         <h2 className='text-center mt-2 mb-3'>Sign Up</h2>
