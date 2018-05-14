@@ -120,7 +120,7 @@ class ManageMembersPage extends Component {
                             </Row>
                             <Row>
                                 <Col>
-                                    <Link to='projects'>Go back</Link>
+                                    <Link to='/project'>Go back</Link>
                                 </Col>
                             </Row>
                         </Container>
