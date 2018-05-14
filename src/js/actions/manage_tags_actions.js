@@ -1,5 +1,5 @@
 import {baseUrlApi, authHeader} from "../api";
-import linkUtils from '../util/link-utils';
+import linkUtils from '../util/link_utils';
 import alertify from 'alertify.js';
 
 export const load = (project) => dispatch => {

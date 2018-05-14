@@ -5,7 +5,7 @@ import {Button, Container, Row, Col, FormGroup, Input, Label, FormFeedback} from
 import {Link} from "react-router-dom";
 import TaskStep from './TaskStep';
 import TaskCriterion from './TaskCriterion';
-import linkUtils from '../util/link-utils';
+import linkUtils from '../util/link_utils';
 import {saveTask} from "../actions/tasks_actions";
 import sort from '../util/sort_by_order';
 

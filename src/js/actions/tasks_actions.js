@@ -1,5 +1,5 @@
 import {baseUrlApi, authHeader} from "../api";
-import linkUtils from '../util/link-utils';
+import linkUtils from '../util/link_utils';
 import history from '../util/history';
 import alertify from "alertify.js";
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types'
 import {Col, Input, Row} from "reactstrap";
-import linkUtils from '../util/link-utils';
+import linkUtils from '../util/link_utils';
 
 class MemberCheckbox extends Component {
     state = {
