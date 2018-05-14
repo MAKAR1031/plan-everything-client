@@ -1,23 +1,22 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Container, Row, Col, Input, Progress, Badge} from 'reactstrap';
+import {Badge, Button, Col, Collapse, Container, Input, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {
-    startEditTask,
-    loadUpdateInfo,
-    loadSteps,
-    loadCriteria,
-    loadEvents,
     completeStep,
     deleteTask,
-    start,
-    openReportDialog,
+    loadCriteria,
+    loadEvents,
+    loadSteps,
+    loadUpdateInfo,
+    openAssignDialog,
+    openEditTagsDialog,
     openEstimateDialog,
-    openEditTagsDialog
+    openReportDialog,
+    start,
+    startEditTask
 } from '../actions/tasks_actions';
-import {openAssignDialog} from "../actions/tasks_actions";
-import moment from 'moment';
 import sort from '../util/sort_by_order';
 import alertify from 'alertify.js';
 import AssignTaskDialog from './AssignTaskDialog';
@@ -25,8 +24,13 @@ import TaskStepReportDialog from './TaskStepReportDialog';
 import TaskEstimateDialog from './TaskEstimateDialog';
 import EditTaskTagsDialog from './EditTaskTagsDialog';
 import ReactMarkdown from 'react-markdown';
+import {parseTime} from "../util/time_utils";
 
 class TaskPage extends Component {
+
+    state = {
+        isHistoryOpened: false
+    };
 
     componentDidMount() {
         this.checkAndLoadData();
@@ -47,9 +51,6 @@ class TaskPage extends Component {
             if (!this.props.criteria) {
                 this.props.loadCriteria(this.props.selected);
             }
-            if (!this.props.events) {
-                this.props.loadEvents(this.props.selected);
-            }
         }
     };
 
@@ -60,7 +61,7 @@ class TaskPage extends Component {
     taskDescription = () => this.props.selected ? this.props.selected.description : '';
 
     updateInfo = (field) => this.props.updateInfo ? (
-        this.props.updateInfo[field] ? moment(this.props.updateInfo[field]).format('DD.MM.YYYY hh:mm') : '-'
+        this.props.updateInfo[field] ? parseTime(this.props.updateInfo[field]) : '-'
     ) : 'Loading...';
 
     tagsList = () => this.props.selected ? this.props.selected.tags : [];
@@ -69,7 +70,7 @@ class TaskPage extends Component {
 
     criteriaList = () => this.props.criteria ? this.props.criteria._embedded.criteria.sort(sort) : [];
 
-    eventsList = () => this.props.events ? this.props.events._embedded.taskEvents : [];
+    eventsList = () => this.props.events ? this.props.events._embedded.taskEvents : null;
 
     stepsCompleted = () => this.stepList().filter(s => s.completed).length;
 
@@ -126,6 +127,16 @@ class TaskPage extends Component {
 
     onEstimate = () => this.props.openEstimateDialog();
 
+    historyToggleButtonName = () => this.state.isHistoryOpened ? 'close' : 'open';
+
+    onToggleHistory = () => this.setState(({isHistoryOpened}) => ({isHistoryOpened: !isHistoryOpened}));
+
+    onHistoryOpened = () => {
+        if (!this.props.events) {
+            this.props.loadEvents(this.props.selected);
+        }
+    };
+
     actualValueStyle = criterion => {
         const {expectedValue, actualValue} = criterion;
         return {
@@ -173,10 +184,10 @@ class TaskPage extends Component {
             </Row>
         ));
 
-        const eventsList = this.eventsList().map(event => (
+        const eventsList = this.eventsList() ? this.eventsList().map(event => (
             <Row key={event.time} className='pl-3 mb-2'>
                 <Col>
-                    <h6>{event.time}</h6>
+                    <h6>{parseTime(event.time)}</h6>
                 </Col>
                 <Col>
                     <h6>{event.name}</h6>
@@ -185,7 +196,7 @@ class TaskPage extends Component {
                     <h6>{event.fullName}</h6>
                 </Col>
             </Row>
-        ));
+        )) : 'Loading...';
 
         return (
             <Container fluid={true}>
@@ -211,9 +222,11 @@ class TaskPage extends Component {
                                 <Container className='mt-4'>
                                     {criteriaList}
                                 </Container>
-                                <h5>History</h5>
+                                <h5>History <Button color='link' onClick={this.onToggleHistory}>{this.historyToggleButtonName()}</Button></h5>
                                 <Container className='mt-4'>
-                                    {eventsList}
+                                    <Collapse isOpen={this.state.isHistoryOpened} onEntering={this.onHistoryOpened}>
+                                        {eventsList}
+                                    </Collapse>
                                 </Container>
                             </Container>
                         </Container>
