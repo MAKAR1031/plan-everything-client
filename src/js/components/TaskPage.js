@@ -187,54 +187,6 @@ class TaskPage extends Component {
             </Row>
         ));
 
-        const editAction = this.canEdit() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onEdit}>Edit task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const editTagsAction = this.canEdit() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onEditTags}>Edit tags</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const deleteAction = this.canDelete() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onDelete}>Delete task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const assignAction = this.canAssign() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onAssign}>Assign task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const startAction = this.canStart() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onStart}>Start task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const estimateAction = this.canEstimate() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onEstimate}>Estimate task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
         return (
             <Container fluid={true}>
                 <Row>
@@ -267,35 +219,87 @@ class TaskPage extends Component {
                         </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
-                        <Row>
-                            <Col>{this.updateInfo('createTime')}</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.updateInfo('updateTime')}</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.updateInfo('finishTime')}</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.taskStatus()}</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.taskAuthor()}</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.taskAssignee()}</Col>
-                        </Row>
-                        {editAction}
-                        {editTagsAction}
-                        {deleteAction}
-                        {assignAction}
-                        {startAction}
-                        {estimateAction}
-                        <Row>
-                            <Col>
-                                <Link to='project'>Go back</Link>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'>
+                            <Row>
+                                <Col>{this.updateInfo('createTime')}</Col>
+                            </Row>
+                            <Row>
+                                <Col>{this.updateInfo('updateTime')}</Col>
+                            </Row>
+                            <Row>
+                                <Col>{this.updateInfo('finishTime')}</Col>
+                            </Row>
+                            <Row>
+                                <Col>{this.taskStatus()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>{this.taskAuthor()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>{this.taskAssignee()}</Col>
+                            </Row>
+                        </Container>
+                        <Container className='actions-container'>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canEdit()}
+                                            onClick={this.onEdit}>
+                                        Edit task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canEdit()}
+                                            onClick={this.onEditTags}>
+                                        Edit tags
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canDelete()}
+                                            onClick={this.onDelete}>
+                                        Delete task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canAssign()}
+                                            onClick={this.onAssign}>
+                                        Assign task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canStart()}
+                                            onClick={this.onStart}>
+                                        Start task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canEstimate()}
+                                            onClick={this.onEstimate}>
+                                        Estimate task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Link to='project'>Go back</Link>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
                 <AssignTaskDialog/>

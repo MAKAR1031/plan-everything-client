@@ -16,14 +16,39 @@
     font-size: 1.2em;
 }
 
-.left-menu > .row,
-.right-menu > .row {
+.left-menu .info-container,
+.right-menu .info-container,
+.left-menu .actions-container,
+.right-menu .actions-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 30px;
+    height: 50%;
+}
+
+.left-menu .info-container,
+.right-menu .info-container {
+    justify-content: flex-start;
+}
+
+.left-menu .actions-container,
+.right-menu .actions-container {
+    justify-content: flex-end;
+}
+
+.left-menu .info-container .row,
+.right-menu .info-container .row,
+.left-menu .actions-container .row,
+.right-menu .actions-container .row {
     margin-bottom: 5px;
 }
 
-.left-menu > .row button,
-.right-menu > .row button {
-    width: 90%;
+.left-menu .info-container button,
+.right-menu .info-container button,
+.left-menu .actions-container button,
+.right-menu .actions-container button {
+    width: 100%;
 }
 
 .selectable-item {

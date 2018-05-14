@@ -2,8 +2,6 @@ import {baseUrlApi, authHeader} from "../api";
 import linkUtils from '../util/link-utils';
 import alertify from 'alertify.js';
 
-alertify.logPosition("bottom right");
-
 export const load = (project) => dispatch => {
     const url = linkUtils.linkUrl(project._links.tags);
     baseUrlApi.get(url, authHeader()).then(res => {

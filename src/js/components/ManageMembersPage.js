@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Container, Row, Col, Card, CardBody, Button} from "reactstrap";
+import {Container, Row, Col, Card, CardBody, Button, Input} from "reactstrap";
 import {Link} from "react-router-dom";
 import {load, select, openAddMembersDialog, openChangeRoleDialog, exclude} from "../actions/manage_members_actions";
 import AddMembersDialog from './AddMembersDialog';
@@ -21,6 +21,8 @@ class ManageMembersPage extends Component {
         this.checkAndLoadMembers();
     }
 
+    projectName = () => this.props.project ? this.props.project.name : '';
+
     checkAndLoadMembers = () => {
         if (!this.props.members && this.props.project) {
             this.props.load(this.props.project);
@@ -29,7 +31,8 @@ class ManageMembersPage extends Component {
 
     membersList = () => this.props.members ? (this.state.search ?
             this.props.members._embedded.projectMembers.filter(m =>
-                m.account.fullName.includes(this.state.search)
+                m.account.fullName.includes(this.state.search) ||
+                m.account.login.includes(this.state.search)
             ) :
             this.props.members._embedded.projectMembers
     ) : null;
@@ -40,6 +43,8 @@ class ManageMembersPage extends Component {
     canChangeRole = () => this.props.selected ? this.props.selected._links.changeRole != null : false;
 
     canExclude = () => this.props.selected ? this.props.selected._links.exclude != null : false;
+
+    onSearch = e => this.setState({search: e.target.value});
 
     onSelect = (member) => this.props.select(member);
 
@@ -69,44 +74,56 @@ class ManageMembersPage extends Component {
             </Card>
         )) : (<Container>Loading...</Container>);
 
-        const changeRoleAction = this.canChangeRole() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onChangeRole}>Change role</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const excludeAction = this.canExclude() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onExclude}>Exclude</Button>
-                </Col>
-            </Row>
-        ) : '';
-
         return (
             <Container fluid={true}>
                 <Row>
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>Manage members</h2>
+                            <Input
+                                className='mb-4'
+                                placeholder='Search member...'
+                                value={this.state.search}
+                                onChange={this.onSearch}/>
                             {list}
                         </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
-                        <Row>
-                            <Col>
-                                <Button color='primary' onClick={this.onAdd}>Add member</Button>
-                            </Col>
-                        </Row>
-                        {changeRoleAction}
-                        {excludeAction}
-                        <Row>
-                            <Col>
-                                <Link to='projects'>Go back</Link>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'>
+                            <Row>
+                                <Col>Project name: {this.projectName()}</Col>
+                            </Row>
+                        </Container>
+                        <Container className='actions-container'>
+                            <Row>
+                                <Col>
+                                    <Button color='primary' onClick={this.onAdd}>Add member</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canChangeRole()}
+                                            onClick={this.onChangeRole}>
+                                        Change role
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canExclude()}
+                                            onClick={this.onExclude}>
+                                        Exclude
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Link to='projects'>Go back</Link>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
                 <AddMembersDialog/>

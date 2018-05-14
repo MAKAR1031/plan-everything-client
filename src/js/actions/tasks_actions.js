@@ -3,8 +3,6 @@ import linkUtils from '../util/link-utils';
 import history from '../util/history';
 import alertify from "alertify.js";
 
-alertify.logPosition("bottom right");
-
 export const loadTasks = (project) => dispatch => {
     const url = linkUtils.linkUrlWithProjection(project._links.tasks, 'full');
     baseUrlApi.get(url, authHeader()).then(res => {

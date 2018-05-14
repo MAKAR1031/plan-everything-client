@@ -6,8 +6,6 @@ import alertify from 'alertify.js';
 import {Container, Row, Col, FormGroup, Label, Input, FormFeedback, Button} from 'reactstrap';
 import {Link} from 'react-router-dom';
 
-alertify.logPosition('bottom right');
-
 class SignUpForm extends Component {
     state = {
         firstName: {

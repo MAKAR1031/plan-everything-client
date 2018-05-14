@@ -5,6 +5,7 @@ import {Col, Container, Row, Button, Card, CardBody, Input} from 'reactstrap';
 import {Link} from "react-router-dom";
 import {load, select, openNewDialog, openEditDialog, deleteTag} from "../actions/manage_tags_actions";
 import TagDialog from './TagDialog';
+import alertify from 'alertify.js';
 
 class ManageTagsPage extends Component {
 
@@ -36,6 +37,8 @@ class ManageTagsPage extends Component {
 
     isCurrent = (tag) => this.props.selected ? this.props.selected._links.self.href === tag._links.self.href : false;
 
+    isSelected = () => this.props.selected != null;
+
     onSearch = e => this.setState({search: e.target.value});
 
     onSelect = (tag) => this.props.select(tag);
@@ -44,7 +47,14 @@ class ManageTagsPage extends Component {
 
     onEdit = () => this.props.openEditDialog();
 
-    onDelete = () => this.props.deleteTag(this.props.selected);
+    onDelete = () => {
+        const tag = this.props.selected;
+        alertify
+            .okBtn("Yes")
+            .cancelBtn("No")
+            .confirm(`Delete '${tag.name}' tag?`,
+                () => this.props.deleteTag(tag));
+    };
 
     render() {
         const list = this.tagsList() ? this.tagsList().map(tag => (
@@ -66,22 +76,6 @@ class ManageTagsPage extends Component {
             <Container>Loading...</Container>
         );
 
-        const editButton = this.props.selected ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onEdit}>Edit tag</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const deleteButton = this.props.selected ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onDelete}>Delete tag</Button>
-                </Col>
-            </Row>
-        ) : '';
-
         return (
             <Container fluid={true}>
                 <Row>
@@ -97,23 +91,41 @@ class ManageTagsPage extends Component {
                         </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
-                        <Row>
-                            <Col>
-                                Project name: {this.projectName()}
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Button color='primary' onClick={this.onAdd}>Add tag</Button>
-                            </Col>
-                        </Row>
-                        {editButton}
-                        {deleteButton}
-                        <Row>
-                            <Col>
-                                <Link to='/project'>Go back</Link>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'>
+                            <Row>
+                                <Col>Project name: {this.projectName()}</Col>
+                            </Row>
+                        </Container>
+                        <Container className='actions-container'>
+                            <Row>
+                                <Col>
+                                    <Button color='primary' onClick={this.onAdd}>Add tag</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.isSelected()}
+                                            onClick={this.onEdit}>
+                                        Edit tag
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.isSelected()}
+                                            onClick={this.onDelete}>
+                                        Delete tag
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Link to='/project'>Go back</Link>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
                 <TagDialog/>

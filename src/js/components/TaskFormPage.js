@@ -338,21 +338,23 @@ class TaskFormPage extends Component {
                         </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
-                        <Row>
-                            <Col>
-                                <p>Project name: {this.projectName()}</p>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Button color='primary' onClick={this.onSave}>Save changes</Button>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <Link to='project'>Go back</Link>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'>
+                            <Row>
+                                <Col>Project name: {this.projectName()}</Col>
+                            </Row>
+                        </Container>
+                        <Container className='actions-container'>
+                            <Row>
+                                <Col>
+                                    <Button color='primary' onClick={this.onSave}>Save changes</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Link to='/project'>Go back</Link>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
             </Container>

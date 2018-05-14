@@ -102,9 +102,12 @@ class ManageAccountsPage extends Component {
                         </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
-                        {lockAction}
-                        {unlockAction}
-                        {changeRoleAction}
+                        <Container fluid={true} className='h-50'/>
+                        <Container fluid={true} className='actions-container'>
+                            {lockAction}
+                            {unlockAction}
+                            {changeRoleAction}
+                        </Container>
                     </Col>
                 </Row>
                 <ChangeAccountRoleDialog/>

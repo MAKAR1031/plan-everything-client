@@ -8,6 +8,9 @@ import {applyMiddleware, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension'
 import reducer from './reducers';
 import App from './containers/App';
+import alertify from 'alertify.js';
+
+alertify.logPosition("bottom left");
 
 const store = createStore(
     reducer,

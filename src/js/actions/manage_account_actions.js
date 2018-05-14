@@ -2,8 +2,6 @@ import {baseUrlApi, authHeader} from '../api/index';
 import linkUtils from '../util/link-utils';
 import alertify from 'alertify.js';
 
-alertify.logPosition("bottom right");
-
 export const loadAccounts = () => dispatch => {
     baseUrlApi.get('/accounts?projection=withRole', authHeader()).then(res => {
         dispatch({

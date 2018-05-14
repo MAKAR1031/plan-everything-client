@@ -1,8 +1,6 @@
 import {baseUrlApi, authHeader} from '../api';
 import alertify from 'alertify.js';
 
-alertify.logPosition("bottom right");
-
 export const open = () => dispatch => {
     dispatch({
         type: 'NEW_PROJECT_DIALOG_OPENED'

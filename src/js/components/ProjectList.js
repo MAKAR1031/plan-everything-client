@@ -64,11 +64,13 @@ class ProjectList extends Component {
             <Container fluid={true}>
                 <Row>
                     <Col sm={2} className='left-menu'>
-                        <Row className='mt-2'>
-                            <Col>
-                                <Button color='primary' onClick={this.props.openDialog}>New project</Button>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'>
+                            <Row className='mt-2'>
+                                <Col>
+                                    <Button color='primary' onClick={this.props.openDialog}>New project</Button>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>

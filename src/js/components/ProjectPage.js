@@ -1,12 +1,16 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Card, CardBody, Container, Row, Col, Badge} from 'reactstrap';
+import {Button, Card, CardBody, Container, Row, Col, Badge, Input} from 'reactstrap';
 import {Link} from "react-router-dom";
 import {loadTasks, select, open, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 import ReactMarkdown from 'react-markdown';
 
 class ProjectPage extends Component {
+
+    state = {
+        search: ''
+    };
 
     componentDidMount() {
         this.checkAndLoadTasks();
@@ -30,9 +34,15 @@ class ProjectPage extends Component {
 
     projectAuthor = () => this.props.project ? this.props.projectAuthors[this.props.project].fullName : '';
 
-    tasksList = () => this.props.tasks ? this.props.tasks._embedded.tasks : [];
+    tasksList = () => this.props.tasks ? (
+        this.state.search ? (
+            this.props.tasks._embedded.tasks.filter(t => t.name.includes(this.state.search))
+        ) : this.props.tasks._embedded.tasks
+    ) : [];
 
     isCurrent = (task) => this.props.selected ? this.props.selected._links.self.href === task._links.self.href : false;
+
+    onSearch = e => this.setState({search: e.target.value});
 
     onSelect = (task) => this.props.select(task);
 
@@ -81,47 +91,6 @@ class ProjectPage extends Component {
             </Card>
         ));
 
-        const newTaskAction = this.canManageTasks() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onNewTask}>New task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const openTaskAction = this.props.selected ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onOpenTask}>Open</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const editTaskAction = this.canEditTask() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onEditTask}>Edit task</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const manageTagsAction = this.canManageTags() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onManageTags}>Manage tags</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const manageMembersAction = this.canManageMembers() ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onManageMembers}>Manage members</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-
         return (
             <Container fluid={true}>
                 <Row>
@@ -131,26 +100,80 @@ class ProjectPage extends Component {
                             <Container className='mb-4'>
                                 <ReactMarkdown source={this.projectDescription()}/>
                             </Container>
+                            <Input
+                                className='mb-4'
+                                placeholder='Search task...'
+                                value={this.state.search}
+                                onChange={this.onSearch}/>
                             {list}
                         </Container>
                     </Col>
                     <Col sm={2} className='right-menu'>
-                        <Row>
-                            <Col>{this.projectDate()}</Col>
-                        </Row>
-                        <Row>
-                            <Col>{this.projectAuthor()}</Col>
-                        </Row>
-                        {newTaskAction}
-                        {openTaskAction}
-                        {editTaskAction}
-                        {manageTagsAction}
-                        {manageMembersAction}
-                        <Row>
-                            <Col>
-                                <Link to='projects'>Go back</Link>
-                            </Col>
-                        </Row>
+                        <Container className='info-container'>
+                            <Row>
+                                <Col>{this.projectDate()}</Col>
+                            </Row>
+                            <Row>
+                                <Col>{this.projectAuthor()}</Col>
+                            </Row>
+                        </Container>
+                        <Container className='actions-container'>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canManageTasks()}
+                                            onClick={this.onNewTask}>
+                                        New task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={this.props.selected == null}
+                                            onClick={this.onOpenTask}>
+                                        Open
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canEditTask()}
+                                            onClick={this.onEditTask}>
+                                        Edit task
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canManageTags()}
+                                            onClick={this.onManageTags}>
+                                        Manage tags
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.canManageMembers()}
+                                            onClick={this.onManageMembers}>
+                                        Manage members
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary' disabled={true}>Close project</Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Link to='projects'>Go back</Link>
+                                </Col>
+                            </Row>
+                        </Container>
                     </Col>
                 </Row>
             </Container>
