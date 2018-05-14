@@ -56,19 +56,23 @@ class ManageTagsPage extends Component {
                 () => this.props.deleteTag(tag));
     };
 
+    itemStyle = (tag) => ({
+        backgroundColor: '#' + tag.color,
+        borderRadius: '50%',
+        width: '25px',
+        height: '25px',
+    });
+
     render() {
         const list = this.tagsList() ? this.tagsList().map(tag => (
             <Card className={'selectable-item mb-3' + (this.isCurrent(tag) ? ' selected' : '')}
                   key={tag.name} onClick={() => this.onSelect(tag)}>
                 <CardBody>
                     <Row>
-                        <Col sm={3}>{tag.name}</Col>
-                        <Col sm={3}>
-                            <Row>
-                                <Col style={{backgroundColor: '#' + tag.color}}/>
-                                <Col>{tag.color}</Col>
-                            </Row>
+                        <Col sm={1} className='d-flex justify-content-center flex-row align-items-center'>
+                            <div style={this.itemStyle(tag)}/>
                         </Col>
+                        <Col>{tag.name}</Col>
                     </Row>
                 </CardBody>
             </Card>

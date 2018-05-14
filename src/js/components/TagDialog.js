@@ -18,29 +18,29 @@ import {closeDialog, createTag, editTag} from "../actions/manage_tags_actions";
 class TagDialog extends Component {
 
     initialState = {
+        init: false,
         name: {
             value: '',
             isInvalid: false
         },
         color: {
             value: '#FFFFFF'
-        },
-        initToEdit: false
+        }
     };
 
     state = this.initialState;
 
     componentDidUpdate() {
-        if (this.props.isOpen && this.props.isEditMode && this.props.selected && !this.state.initToEdit) {
+        if (this.props.isOpen && this.props.isEditMode && this.props.selected && !this.state.init) {
             this.setState({
+                init: true,
                 name: {
                     value: this.props.selected.name,
                     isInvalid: false
                 },
                 color: {
                     value: '#' + this.props.selected.color
-                },
-                initToEdit: true
+                }
             });
         }
     }
@@ -63,6 +63,7 @@ class TagDialog extends Component {
             valid = false;
         }
         if (valid) {
+            this.resetState();
             const tag = {
                 name: this.state.name.value,
                 color: this.state.color.value.replace('#', '')
@@ -72,7 +73,6 @@ class TagDialog extends Component {
             } else {
                 this.props.createTag(this.props.project, tag);
             }
-            this.resetState();
         }
     };
 
