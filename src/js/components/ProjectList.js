@@ -4,7 +4,7 @@ import {bindActionCreators} from 'redux';
 import NewProjectDialog from './NewProjectDialog';
 import {getAuthor, getCurrentMember, load, selectProject} from '../actions/projects_actions'
 import {open as openDialog} from '../actions/new_project_dialog_actions';
-import {Card, CardBody, Col, Container, Row} from "reactstrap";
+import {Button, Card, CardBody, Col, Container, Row} from "reactstrap";
 
 class ProjectList extends Component {
 
@@ -61,20 +61,24 @@ class ProjectList extends Component {
         );
 
         return (
-            <div className='container-fluid'>
-                <div className='row'>
-                    <div className="col-2 left-menu">
-                        <button className='btn btn-secondary' onClick={this.props.openDialog}>New project</button>
-                    </div>
-                    <div className="col-10">
+            <Container fluid={true}>
+                <Row>
+                    <Col sm={2} className='left-menu'>
+                        <Row className='mt-2'>
+                            <Col>
+                                <Button color='primary' onClick={this.props.openDialog}>New project</Button>
+                            </Col>
+                        </Row>
+                    </Col>
+                    <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>Project list</h2>
                             {projectList}
                         </Container>
-                    </div>
-                </div>
+                    </Col>
+                </Row>
                 <NewProjectDialog/>
-            </div>
+            </Container>
         );
     }
 }
