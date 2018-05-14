@@ -51,6 +51,9 @@ class TaskPage extends Component {
             if (!this.props.criteria) {
                 this.props.loadCriteria(this.props.selected);
             }
+            if (!this.props.events && this.state.isHistoryOpened) {
+                this.props.loadEvents(this.props.selected);
+            }
         }
     };
 
@@ -130,12 +133,6 @@ class TaskPage extends Component {
     historyToggleButtonName = () => this.state.isHistoryOpened ? 'close' : 'open';
 
     onToggleHistory = () => this.setState(({isHistoryOpened}) => ({isHistoryOpened: !isHistoryOpened}));
-
-    onHistoryOpened = () => {
-        if (!this.props.events) {
-            this.props.loadEvents(this.props.selected);
-        }
-    };
 
     actualValueStyle = criterion => {
         const {expectedValue, actualValue} = criterion;
@@ -224,7 +221,7 @@ class TaskPage extends Component {
                                 </Container>
                                 <h5>History <Button color='link' onClick={this.onToggleHistory}>{this.historyToggleButtonName()}</Button></h5>
                                 <Container className='mt-4'>
-                                    <Collapse isOpen={this.state.isHistoryOpened} onEntering={this.onHistoryOpened}>
+                                    <Collapse isOpen={this.state.isHistoryOpened}>
                                         {eventsList}
                                     </Collapse>
                                 </Container>
