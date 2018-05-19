@@ -5,6 +5,7 @@ import NewProjectDialog from './NewProjectDialog';
 import {getAuthor, getCurrentMember, load, selectProject} from '../actions/projects_actions'
 import {open as openDialog} from '../actions/new_project_dialog_actions';
 import {Button, Card, CardBody, Col, Container, Row} from "reactstrap";
+import {parseDate} from "../util/time_utils";
 
 class ProjectList extends Component {
 
@@ -50,7 +51,7 @@ class ProjectList extends Component {
                 <CardBody>
                     <Row>
                         <Col><strong>{project.name}</strong></Col>
-                        <Col>{project.createDate}</Col>
+                        <Col>{parseDate(project.createDate)}</Col>
                         <Col>{this.author(project)}</Col>
                         <Col>{this.myMemberRole(project)}</Col>
                     </Row>

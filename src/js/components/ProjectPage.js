@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {loadTasks, open, select, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 import ReactMarkdown from 'react-markdown';
 import Search from "./Search";
+import {parseDate} from "../util/time_utils";
 
 class ProjectPage extends Component {
 
@@ -110,7 +111,7 @@ class ProjectPage extends Component {
                     <Col sm={2} className='right-menu'>
                         <Container className='info-container'>
                             <Row>
-                                <Col>{this.projectDate()}</Col>
+                                <Col>{parseDate(this.projectDate())}</Col>
                             </Row>
                             <Row>
                                 <Col>{this.projectAuthor()}</Col>
