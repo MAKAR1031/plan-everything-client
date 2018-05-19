@@ -8,6 +8,7 @@ import TaskCriterion from './TaskCriterion';
 import linkUtils from '../util/link_utils';
 import {saveTask} from "../actions/tasks_actions";
 import sort from '../util/sort_by_order';
+import MarkdownSupport from "./MarkdownSupport";
 
 class TaskFormPage extends Component {
 
@@ -273,7 +274,7 @@ class TaskFormPage extends Component {
                             <Container className='w-50 border p-3 mb-3'>
                                 <Container className='w-75'>
                                     <FormGroup row>
-                                        <Label for='taskName' sm={2}>Name</Label>
+                                        <Label for='taskName' sm={3}>Name</Label>
                                         <Col>
                                             <Input id='taskName'
                                                    name='name'
@@ -286,7 +287,7 @@ class TaskFormPage extends Component {
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label for='taskDescription' sm={2}>Description</Label>
+                                        <Label for='taskDescription' sm={3}>Description <MarkdownSupport/></Label>
                                         <Col>
                                             <Input id='taskDescription'
                                                    name='description'
@@ -299,7 +300,7 @@ class TaskFormPage extends Component {
                                         </Col>
                                     </FormGroup>
                                     <FormGroup row>
-                                        <Label for='finishDate' sm={2}>Finish date</Label>
+                                        <Label for='finishDate' sm={3}>Finish date</Label>
                                         <Col>
                                             <Input id='finishDate'
                                                    name='finishDate'

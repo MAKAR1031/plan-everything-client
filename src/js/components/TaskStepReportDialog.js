@@ -16,6 +16,7 @@ import {
     ModalHeader, Row
 } from "reactstrap";
 import ReactMarkdown from 'react-markdown';
+import MarkdownSupport from "./MarkdownSupport";
 
 class TaskStepReportDialog extends Component {
 
@@ -58,7 +59,7 @@ class TaskStepReportDialog extends Component {
 
         return (
             <Modal isOpen={this.props.isOpen} fade={true} size='lg'>
-                <ModalHeader toggle={this.onClose}>Write report</ModalHeader>
+                <ModalHeader toggle={this.onClose}>Write report <MarkdownSupport/></ModalHeader>
                 <ModalBody>
                     <Container>
                         <FormGroup row>

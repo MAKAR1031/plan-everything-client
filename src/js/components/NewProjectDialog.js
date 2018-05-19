@@ -1,8 +1,22 @@
 import React, {Component} from 'react';
-import {Modal, ModalBody, ModalFooter, ModalHeader, Button, Row, Col, FormGroup, Label, Input, Alert, FormFeedback} from 'reactstrap';
+import {
+    Alert,
+    Button,
+    Col,
+    FormFeedback,
+    FormGroup,
+    Input,
+    Label,
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    Row
+} from 'reactstrap';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {close, createProject} from '../actions/new_project_dialog_actions';
+import MarkdownSupport from "./MarkdownSupport";
 
 class NewProjectDialog extends Component {
     initialState = {
@@ -71,8 +85,8 @@ class NewProjectDialog extends Component {
                     <Row>
                         <Col>
                             <FormGroup row>
-                                <Label for="projectName" sm={3}>Name</Label>
-                                <Col sm={9}>
+                                <Label for="projectName" sm={4}>Name</Label>
+                                <Col>
                                     <Input id="projectName" type="text" placeholder="Project name"
                                            value={this.state.name.value}
                                            invalid={this.state.name.isInvalid}
@@ -81,8 +95,8 @@ class NewProjectDialog extends Component {
                                 </Col>
                             </FormGroup>
                             <FormGroup row>
-                                <Label for="projectDescription" sm={3}>Description</Label>
-                                <Col sm={9}>
+                                <Label for="projectDescription" sm={4}>Description <MarkdownSupport/></Label>
+                                <Col>
                                     <Input id="projectDescription"
                                            type="textarea"
                                            placeholder="Description"
