@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from "redux";
-import {logout, loadAccount} from "../actions/auth_actions";
+import {Button} from "reactstrap";
+import {loadAccount, logout} from "../actions/auth_actions";
 
 class Header extends Component {
 
@@ -27,9 +28,9 @@ class Header extends Component {
         const userInfo = (this.props.isAuthorized && this.props.account) ? (<ul className='navbar-nav'>
             <li className='nav-item'>
                 <span className='mr-2 navbar-text'>
-                    You are logged in as: <strong>{this.props.account.fullName}</strong>
+                    <strong>{this.props.account.fullName}</strong>
                 </span>
-                <button className='btn btn-danger' onClick={this.onLogout}>Logout</button>
+                <Button color='danger' onClick={this.onLogout}>Logout</Button>
             </li>
         </ul>) : '';
         return (
