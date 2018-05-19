@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Col, Container, Row, Button, Card, CardBody, Input} from 'reactstrap';
+import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
 import {Link} from "react-router-dom";
-import {load, select, openNewDialog, openEditDialog, deleteTag} from "../actions/manage_tags_actions";
+import {deleteTag, load, openEditDialog, openNewDialog, select} from "../actions/manage_tags_actions";
 import TagDialog from './TagDialog';
 import alertify from 'alertify.js';
+import Search from "./Search";
 
 class ManageTagsPage extends Component {
 
@@ -86,11 +87,9 @@ class ManageTagsPage extends Component {
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>Manage tags</h2>
-                            <Input
-                                className='mb-4'
-                                placeholder='Search tag...'
-                                value={this.state.search}
-                                onChange={this.onSearch}/>
+                            <Search placeholder='Search tags...'
+                                    query={this.state.search}
+                                    onSearchHandler={this.onSearch}/>
                             {list}
                         </Container>
                     </Col>

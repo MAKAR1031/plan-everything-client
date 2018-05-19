@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Button, Card, CardBody, Container, Row, Col, Badge, Input} from 'reactstrap';
+import {Badge, Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
 import {Link} from "react-router-dom";
-import {loadTasks, select, open, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
+import {loadTasks, open, select, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 import ReactMarkdown from 'react-markdown';
+import Search from "./Search";
 
 class ProjectPage extends Component {
 
@@ -100,11 +101,9 @@ class ProjectPage extends Component {
                             <Container className='mb-4'>
                                 <ReactMarkdown source={this.projectDescription()}/>
                             </Container>
-                            <Input
-                                className='mb-4'
-                                placeholder='Search task...'
-                                value={this.state.search}
-                                onChange={this.onSearch}/>
+                            <Search placeholder='Search task...'
+                                    query={this.state.search}
+                                    onSearchHandler={this.onSearch}/>
                             {list}
                         </Container>
                     </Col>

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Button, Col, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
+import {Col, FormFeedback, FormGroup, Input, Label, Row} from "reactstrap";
+import FontAwesome from 'react-fontawesome';
 
 class EditableTaskStep extends Component {
 
@@ -30,7 +31,9 @@ class EditableTaskStep extends Component {
         return (
             <Row>
                 <Col sm={1}>
-                    <Button color='danger' onClick={this.onRemove}>X</Button>
+                    <button className='cross-button' onClick={this.onRemove}>
+                        <FontAwesome name='times' size='2x'/>
+                    </button>
                 </Col>
                 <Col sm={6}>
                     <FormGroup>

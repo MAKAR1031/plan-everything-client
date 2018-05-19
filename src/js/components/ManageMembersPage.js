@@ -7,6 +7,7 @@ import {load, select, openAddMembersDialog, openChangeRoleDialog, exclude} from 
 import AddMembersDialog from './AddMembersDialog';
 import ChangeMemberRoleDialog from './ChangeMemberRoleDialog';
 import alertify from 'alertify.js';
+import Search from "./Search";
 
 class ManageMembersPage extends Component {
     state = {
@@ -80,11 +81,9 @@ class ManageMembersPage extends Component {
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>Manage members</h2>
-                            <Input
-                                className='mb-4'
-                                placeholder='Search member...'
-                                value={this.state.search}
-                                onChange={this.onSearch}/>
+                            <Search placeholder='Search members...'
+                                    query={this.state.search}
+                                    onSearchHandler={this.onSearch}/>
                             {list}
                         </Container>
                     </Col>

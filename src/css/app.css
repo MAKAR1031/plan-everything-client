@@ -77,3 +77,13 @@ input[type='color'].form-control {
 .step-item.with-report {
     cursor: pointer;
 }
+
+.cross-button {
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+}
+
+.cross-button span {
+    color: #FF0033
+}

@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import {Button, Card, CardBody, Col, Container, Row} from 'reactstrap';
+import FontAwesome from 'react-fontawesome';
 import ChangeAccountRoleDialog from './ChangeAccountRoleDialog';
-import {Button, Card, CardBody, Col, Container, Input, Row} from 'reactstrap';
-import {loadAccounts, select, lock, unlock, openChangeRoleDialog} from '../actions/manage_account_actions';
+import {loadAccounts, lock, openChangeRoleDialog, select, unlock} from '../actions/manage_account_actions';
+import Search from "./Search";
 
 class ManageAccountsPage extends Component {
 
@@ -57,7 +59,13 @@ class ManageAccountsPage extends Component {
                     <Row>
                         <Col sm={4}>{account.fullName}</Col>
                         <Col sm={4}>{account.role.name}</Col>
-                        <Col sm={4}>{account.blocked ? 'blocked' : 'active'}</Col>
+                        <Col sm={4}>
+                            {account.blocked ? (
+                                <FontAwesome name='lock' size="2x" style={{color: '#FF0033'}}/>
+                            ) : (
+                                <FontAwesome name="unlock" size="2x" style={{color: '#33CC33'}}/>
+                            )}
+                        </Col>
                     </Row>
                 </CardBody>
             </Card>
@@ -93,11 +101,9 @@ class ManageAccountsPage extends Component {
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>Manage accounts</h2>
-                            <Input
-                                className='mb-4'
-                                placeholder='Search account...'
-                                value={this.state.search}
-                                onChange={this.onSearch}/>
+                            <Search placeholder='Search account...'
+                                    query={this.state.search}
+                                    onSearchHandler={this.onSearch}/>
                             {accountList}
                         </Container>
                     </Col>

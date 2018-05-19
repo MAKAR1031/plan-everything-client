@@ -1,4 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'font-awesome/css/font-awesome.min.css';
 import '../css/app.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -10,7 +11,7 @@ import reducer from './reducers';
 import App from './containers/App';
 import alertify from 'alertify.js';
 
-alertify.logPosition("bottom left");
+alertify.logPosition('bottom left');
 
 const store = createStore(
     reducer,
