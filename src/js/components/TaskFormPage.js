@@ -3,7 +3,7 @@ import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {Button, Container, Row, Col, FormGroup, Input, Label, FormFeedback} from "reactstrap";
 import {Link} from "react-router-dom";
-import TaskStep from './TaskStep';
+import EditableTaskStep from './EditableTaskStep';
 import TaskCriterion from './TaskCriterion';
 import linkUtils from '../util/link_utils';
 import {saveTask} from "../actions/tasks_actions";
@@ -249,11 +249,11 @@ class TaskFormPage extends Component {
     render() {
 
         const stepList = this.state.steps.length > 0 ? this.state.steps.map((step, i) => (
-            <TaskStep index={i}
-                      key={i}
-                      step={step}
-                      onChangeHandler={this.onChangeStep}
-                      onRemoveHandler={this.onRemoveStep}/>
+            <EditableTaskStep index={i}
+                              key={i}
+                              step={step}
+                              onChangeHandler={this.onChangeStep}
+                              onRemoveHandler={this.onRemoveStep}/>
         )) : <Container className='text-danger text-center'>No steps</Container>;
 
         const criteriaList = this.state.criteria.length > 0 ? this.state.criteria.map((criterion, i) => (

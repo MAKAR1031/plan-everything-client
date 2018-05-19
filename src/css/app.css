@@ -73,3 +73,7 @@ input[type='color'].form-control {
     max-height: 250px;
     overflow: auto;
 }
+
+.step-item.with-report {
+    cursor: pointer;
+}

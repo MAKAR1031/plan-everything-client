@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Badge, Button, Col, Collapse, Container, Input, Progress, Row} from 'reactstrap';
+import {Badge, Button, Col, Collapse, Container, Progress, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {
     completeStep,
@@ -23,6 +23,7 @@ import AssignTaskDialog from './AssignTaskDialog';
 import TaskStepReportDialog from './TaskStepReportDialog';
 import TaskEstimateDialog from './TaskEstimateDialog';
 import EditTaskTagsDialog from './EditTaskTagsDialog';
+import TaskStep from './TaskStep';
 import ReactMarkdown from 'react-markdown';
 import {parseTime} from "../util/time_utils";
 
@@ -95,8 +96,6 @@ class TaskPage extends Component {
 
     canStart = () => this.props.selected ? this.props.selected._links.start != null : false;
 
-    canComplete = (step) => step._links.complete != null;
-
     canEstimate = () => this.props.selected ? this.props.selected._links.estimate != null : false;
 
     onEdit = () => this.props.edit(this.props.selected);
@@ -149,16 +148,7 @@ class TaskPage extends Component {
         ));
 
         const stepList = this.stepList().map(step => (
-            <Row key={step.name} className='pl-3 mb-2'>
-                <Col>
-                    <Input
-                        type='checkbox'
-                        checked={step.completed}
-                        disabled={step.completed || !this.canComplete(step)}
-                        onChange={() => this.onStepComplete(step)}/>
-                    <h6>{step.name}</h6>
-                </Col>
-            </Row>
+            <TaskStep key={step._links.self.href} step={step} onCompleteHandler={this.onStepComplete}/>
         ));
 
         const criteriaList = this.criteriaList().map(criterion => (
