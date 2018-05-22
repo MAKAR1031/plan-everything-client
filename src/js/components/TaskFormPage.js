@@ -202,7 +202,7 @@ class TaskFormPage extends Component {
         } else {
             const criteria = this.state.criteria.map(criterion => {
                 const invalidName = !criterion.name.value;
-                const invalidExpectedValue = !criterion.expectedValue.value;
+                const invalidExpectedValue = criterion.expectedValue.value == null || criterion.expectedValue.value <= 0;
                 if (!invalidName && !invalidExpectedValue) {
                     return criterion;
                 }

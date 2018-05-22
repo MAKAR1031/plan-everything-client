@@ -51,7 +51,7 @@ class TaskEstimateDialog extends Component {
         let valid = true;
 
         const criteria = this.state.criteria.map(criterion => {
-            const invalidActualValue = !criterion.actualValue.value;
+            const invalidActualValue = criterion.actualValue.value == null || criterion.actualValue.value <= 0;
             if (!invalidActualValue) {
                 return criterion;
             }
