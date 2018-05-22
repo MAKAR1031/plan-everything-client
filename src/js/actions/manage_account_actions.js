@@ -1,6 +1,7 @@
 import {baseUrlApi, authHeader} from '../api/index';
 import linkUtils from '../util/link_utils';
 import alertify from 'alertify.js';
+import {handleError} from "../util/error_handler";
 
 export const loadAccounts = () => dispatch => {
     baseUrlApi.get('/accounts?projection=withRole', authHeader()).then(res => {
@@ -8,9 +9,7 @@ export const loadAccounts = () => dispatch => {
             type: 'ACCOUNTS_LOADED',
             accounts: res.data
         })
-    }).catch(reason => {
-        console.log('Error while loading accounts: ', reason.response);
-    });
+    }).catch(handleError);
 };
 
 export const loadRoles = () => dispatch => {
@@ -19,9 +18,7 @@ export const loadRoles = () => dispatch => {
             type: 'ACCOUNT_ROLES_LOADED',
             roles: res.data
         });
-    }).catch(reason => {
-        console.log('Error while loading account roles: ', reason.response);
-    });
+    }).catch(handleError);
 };
 
 export const select = (account) => dispatch => {
@@ -39,9 +36,7 @@ export const lock = (account) => dispatch => {
             type: 'ACCOUNT_UPDATED',
             account: res.data
         });
-    }).catch(reason => {
-        console.log('Error while lock account: ', reason.response);
-    });
+    }).catch(handleError);
 };
 
 export const unlock = (account) => dispatch => {
@@ -52,9 +47,7 @@ export const unlock = (account) => dispatch => {
             type: 'ACCOUNT_UPDATED',
             account: res.data
         });
-    }).catch(reason => {
-        console.log('Error while unlock account: ', reason.response);
-    });
+    }).catch(handleError);
 };
 
 export const openChangeRoleDialog = () => dispatch => {
@@ -83,5 +76,5 @@ export const changeRole = (account, role) => dispatch => {
                 type: 'ACCOUNT_CHANGE_ROLE_DIALOG_CLOSED'
             });
         })
-    });
+    }).catch(handleError);
 };

@@ -1,7 +1,8 @@
-import {baseUrlApi, authHeader} from "../api";
+import {authHeader, baseUrlApi} from "../api";
 import linkUtils from '../util/link_utils';
 import history from '../util/history';
 import alertify from "alertify.js";
+import {handleError} from "../util/error_handler";
 
 export const loadTasks = (project) => dispatch => {
     const url = linkUtils.linkUrlWithProjection(project._links.tasks, 'full');
@@ -10,17 +11,14 @@ export const loadTasks = (project) => dispatch => {
             type: 'TASKS_LOADED',
             tasks: res.data
         });
-    }).catch(reason => {
-        alertify.error('Error while loading tasks');
-        console.log('Error while loading tasks: ', reason);
-    })
+    }).catch(handleError);
 };
 
 export const select = (task) => dispatch => {
     dispatch({
         type: 'TASK_SELECTED',
         task
-    })
+    });
 };
 
 export const open = () => () => {
@@ -34,7 +32,7 @@ export const loadUpdateInfo = (task) => dispatch => {
             type: 'TASK_UPDATE_INFO_LOADED',
             info: res.data
         })
-    });
+    }).catch(handleError);
 };
 
 export const startCreateNewTask = () => dispatch => {
@@ -60,7 +58,7 @@ export const loadSteps = (task) => dispatch => {
             type: 'TASK_STEPS_LOADED',
             steps: res.data
         });
-    });
+    }).catch(handleError);
 };
 
 export const loadCriteria = (task) => dispatch => {
@@ -70,7 +68,7 @@ export const loadCriteria = (task) => dispatch => {
             type: 'TASK_CRITERIA_LOADED',
             criteria: res.data
         });
-    });
+    }).catch(handleError);
 };
 
 export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) => dispatch => {
@@ -98,7 +96,7 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
                     baseUrlApi.patch(criterionUrl, criterion, authHeader()).then(() => {
                         alertify.success('Criterion updated');
                     });
-                } else  {
+                } else {
                     baseUrlApi.post('/criteria', {...criterion, task: taskUrl}, authHeader()).then(() => {
                         alertify.success('Criterion created');
                     });
@@ -112,21 +110,18 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
                 });
                 history.push('/task');
             });
-        }).catch(reason => {
-            alertify.error('Error while save task');
-            console.log('Error while save task: ', reason);
-        });
+        }).catch(handleError);
         removedSteps.forEach(step => {
             const stepUrl = step.url;
             baseUrlApi.delete(stepUrl, authHeader()).then(() => {
                 alertify.success('Step removed');
-            });
+            }).catch(handleError);
         });
         removedCriteria.forEach(criterion => {
             const criterionUrl = criterion.url;
             baseUrlApi.delete(criterionUrl, authHeader()).then(() => {
                 alertify.success('Criterion removed');
-            });
+            }).catch(handleError);
         });
     } else {
         baseUrlApi.post('/tasks', task, authHeader()).then(res => {
@@ -149,10 +144,7 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
                 });
                 history.push('/task');
             });
-        }).catch(reason => {
-            alertify.error('Error while save task');
-            console.log('Error while save task: ', reason);
-        });
+        }).catch(handleError);
     }
 };
 
@@ -165,7 +157,7 @@ export const deleteTask = (task) => dispatch => {
         });
         alertify.success('Task deleted');
         history.push('/project');
-    });
+    }).catch(handleError);
 };
 
 export const openAssignDialog = () => dispatch => {
@@ -188,7 +180,7 @@ export const assign = (task, memberId) => dispatch => {
             task: res.data
         });
         alertify.success('Task assigned');
-    });
+    }).catch(handleError);
 };
 
 export const start = (task) => dispatch => {
@@ -199,7 +191,7 @@ export const start = (task) => dispatch => {
             task: res.data
         });
         alertify.success('Task started');
-    });
+    }).catch(handleError);
 };
 
 export const completeStep = (step, report) => dispatch => {
@@ -214,7 +206,7 @@ export const completeStep = (step, report) => dispatch => {
             });
             alertify.success(`Step ${step.name} completed`);
         });
-    });
+    }).catch(handleError);
 };
 
 export const openReportDialog = (step) => dispatch => {
@@ -263,7 +255,7 @@ export const estimateTask = (task, criteria) => dispatch => {
                     });
                 });
             }
-        });
+        }).catch(handleError);
     });
 };
 
@@ -274,10 +266,7 @@ export const loadEvents = (task) => dispatch => {
             type: 'TASK_EVENTS_LOADED',
             events: res.data
         });
-    }).catch(reason => {
-        alertify.error('Error while loading task events');
-        console.log('Error while loading task events: ', reason);
-    });
+    }).catch(handleError);
 };
 
 export const openEditTagsDialog = () => dispatch => {
@@ -299,10 +288,7 @@ export const loadTags = (task) => dispatch => {
             type: 'TASK_TAGS_LOADED',
             tags: res.data
         });
-    }).catch(reason => {
-        alertify.error('Error while loading task tags');
-        console.log('Error while loading task tags: ', reason);
-    });
+    }).catch(handleError);
 };
 
 export const updateTags = (task, tags) => dispatch => {
@@ -322,8 +308,5 @@ export const updateTags = (task, tags) => dispatch => {
             });
             alertify.success('Tags updated');
         });
-    }).catch(reason => {
-        alertify.error('Error while loading updating tags');
-        console.log('Error while loading updating tags: ', reason);
-    });
+    }).catch(handleError);
 };

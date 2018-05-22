@@ -1,6 +1,7 @@
 import {api, baseUrlApi, authHeader} from '../api'
 import linkUtils from '../util/link_utils';
 import history from '../util/history';
+import {handleError} from "../util/error_handler";
 
 export const load = () => dispatch => {
     baseUrlApi.get('/projects/search/my', authHeader()).then(res => {
@@ -8,9 +9,7 @@ export const load = () => dispatch => {
             type: 'PROJECTS_LOADED',
             data: res.data
         });
-    }).catch(reason => {
-        console.log(reason);
-    })
+    }).catch(handleError);
 };
 
 export const getAuthor = (project) => dispatch => {
@@ -21,9 +20,7 @@ export const getAuthor = (project) => dispatch => {
             project,
             author: res.data
         })
-    }).catch(reason => {
-        console.log(reason);
-    });
+    }).catch(handleError);
 };
 
 export const getCurrentMember = (project) => dispatch => {
@@ -34,9 +31,7 @@ export const getCurrentMember = (project) => dispatch => {
             project,
             member: res.data
         });
-    }).catch(reason => {
-        console.log(reason);
-    });
+    }).catch(handleError);
 };
 
 export const selectProject = (project) => dispatch => {

@@ -1,5 +1,6 @@
 import {baseUrlApi, authHeader} from '../api';
 import alertify from 'alertify.js';
+import {handleError} from "../util/error_handler";
 
 export const open = () => dispatch => {
     dispatch({
@@ -28,7 +29,7 @@ export const createProject = (name, description) => dispatch => {
         dispatch({
             type: 'NEW_PROJECT_CREATED',
             project: res.data
-        })
+        });
     }).catch(reason => {
         dispatch({
             type: 'NEW_PROJECT_LOADING_COMPLETE'
@@ -36,6 +37,7 @@ export const createProject = (name, description) => dispatch => {
         dispatch({
             type: 'NEW_PROJECT_CREATE_FAILED',
             error: reason.response.data.message
-        })
-    })
+        });
+        handleError(reason);
+    });
 };

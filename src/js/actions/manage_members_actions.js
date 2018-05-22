@@ -1,5 +1,6 @@
 import {baseUrlApi, authHeader} from "../api";
 import linkUtils from '../util/link_utils';
+import {handleError} from "../util/error_handler";
 import alertify from 'alertify.js';
 
 export const load = (project) => dispatch => {
@@ -9,10 +10,7 @@ export const load = (project) => dispatch => {
             type: 'MEMBERS_LOADED',
             members: res.data
         })
-    }).catch(reason => {
-        alertify.error('Error while loadings members');
-        console.log('Error while loadings members: ', reason.response);
-    });
+    }).catch(handleError);
 };
 
 export const select = (member) => dispatch => {
@@ -41,10 +39,7 @@ export const loadNonProjectAccounts = (project) => dispatch => {
             type: 'ACCOUNTS_TO_ADD_MEMBERS_LOADED',
             accounts: res.data
         });
-    }).catch(reason => {
-        alertify.error('Error while loadings accounts to add members');
-        console.log('Error while loadings accounts to add members: ', reason.response);
-    });
+    }).catch(handleError);
 };
 
 export const addAccountToProject = (project, accountUrl) => dispatch => {
@@ -62,10 +57,7 @@ export const addAccountToProject = (project, accountUrl) => dispatch => {
                 member
             })
         });
-    }).catch(reason => {
-        alertify.error('Error while add member to project');
-        console.log('Error while add member to project: ', reason);
-    });
+    }).catch(handleError);
 };
 
 export const exclude = (member) => dispatch => {
@@ -76,10 +68,7 @@ export const exclude = (member) => dispatch => {
             type: 'MEMBER_EXCLUDED',
             member
         })
-    }).catch(reason => {
-        alertify.error('Error while exclude member');
-        console.log('Error while exclude member: ', reason);
-    });
+    }).catch(handleError);
 };
 
 export const openChangeRoleDialog = () => dispatch => {
@@ -100,10 +89,7 @@ export const loadRoles = () => dispatch => {
             type: 'MEMBER_ROLES_LOADED',
             roles: res.data
         })
-    }).catch(reason => {
-        alertify.error('Error while loading member roles');
-        console.log('Error while loading member roles: ', reason);
-    });
+    }).catch(handleError);
 };
 
 export const changeRole = (member, role) => dispatch => {
@@ -120,5 +106,5 @@ export const changeRole = (member, role) => dispatch => {
                 type: 'CHANGE_MEMBER_ROLE_DIALOG_CLOSED'
             });
         })
-    });
+    }).catch(handleError);
 };

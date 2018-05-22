@@ -1,6 +1,7 @@
 import {baseUrlApi, authHeader} from "../api";
 import linkUtils from '../util/link_utils';
 import alertify from 'alertify.js';
+import {handleError} from "../util/error_handler";
 
 export const load = (project) => dispatch => {
     const url = linkUtils.linkUrl(project._links.tags);
@@ -9,10 +10,7 @@ export const load = (project) => dispatch => {
             type: 'TAGS_LOADED',
             tags: res.data
         })
-    }).catch(reason => {
-        alertify.error('Error while loadings tags');
-        console.log('Error while loadings tags: ', reason.response);
-    })
+    }).catch(handleError);
 };
 
 export const select = (tag) => dispatch => {
@@ -54,10 +52,7 @@ export const createTag = (project, tag) => dispatch => {
         dispatch({
             type: 'TAG_DIALOG_CLOSED'
         });
-    }).catch(reason => {
-        alertify.error('Error while creating tag');
-        console.log('Error while creating tag: ', reason);
-    })
+    }).catch(handleError);
 };
 
 export const editTag = (project, tag, newTag) => dispatch => {
@@ -75,10 +70,7 @@ export const editTag = (project, tag, newTag) => dispatch => {
         dispatch({
             type: 'TAG_DIALOG_CLOSED'
         });
-    }).catch(reason => {
-        alertify.error('Error while edit tag');
-        console.log('Error while edit tag: ', reason);
-    })
+    }).catch(handleError);
 };
 
 export const deleteTag = (tag) => dispatch => {
@@ -92,8 +84,5 @@ export const deleteTag = (tag) => dispatch => {
         dispatch({
             type: 'TAG_DIALOG_CLOSED'
         });
-    }).catch(reason => {
-        alertify.error('Error while delete tag');
-        console.log('Error while delete tag: ', reason);
-    })
+    }).catch(handleError);
 };

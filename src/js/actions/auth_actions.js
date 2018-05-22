@@ -2,6 +2,7 @@ import qs from 'querystring';
 import {baseUrlApi, authHeader} from '../api';
 import apiConfig from '../api/config';
 import axios from "axios";
+import {handleError} from "../util/error_handler";
 
 const loginApi = axios.create({
     baseURL: apiConfig.baseUrl,
@@ -34,6 +35,7 @@ export const signIn = (username, password) => dispatch => {
             type: 'AUTHORIZATION_FAILED',
             error: reason.response.data.error_description
         });
+        handleError(reason);
     })
 };
 
@@ -42,10 +44,11 @@ export const signUp = (account) => dispatch => {
         dispatch({
             type: 'SIGN_UP_SUCCESSFUL'
         });
-    }).catch(() => {
+    }).catch(reason => {
         dispatch({
             type: 'SIGN_UP_FAILED'
         });
+        handleError(reason);
     })
 };
 
