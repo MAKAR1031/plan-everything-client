@@ -80,69 +80,53 @@ export const saveTask = (task, steps, criteria, removedSteps, removedCriteria) =
                 if (step.url) {
                     const stepUrl = step.url;
                     delete step.url;
-                    baseUrlApi.patch(stepUrl, step, authHeader()).then(() => {
-                        alertify.success('Step updated');
-                    });
+                    baseUrlApi.patch(stepUrl, step, authHeader());
                 } else {
-                    baseUrlApi.post('/taskSteps', {...step, task: taskUrl}, authHeader()).then(() => {
-                        alertify.success('Step created');
-                    });
+                    baseUrlApi.post('/taskSteps', {...step, task: taskUrl}, authHeader());
                 }
             });
             criteria.forEach(criterion => {
                 if (criterion.url) {
                     const criterionUrl = criterion.url;
                     delete criterion.url;
-                    baseUrlApi.patch(criterionUrl, criterion, authHeader()).then(() => {
-                        alertify.success('Criterion updated');
-                    });
+                    baseUrlApi.patch(criterionUrl, criterion, authHeader());
                 } else {
-                    baseUrlApi.post('/criteria', {...criterion, task: taskUrl}, authHeader()).then(() => {
-                        alertify.success('Criterion created');
-                    });
+                    baseUrlApi.post('/criteria', {...criterion, task: taskUrl}, authHeader());
                 }
             });
             baseUrlApi.get(linkUtils.linkUrlWithProjection(res.data._links.self, 'full'), authHeader()).then(res => {
-                alertify.success('Task updated');
                 dispatch({
                     type: 'TASK_UPDATED',
                     task: res.data
                 });
                 history.push('/task');
+                alertify.success('Task updated');
             });
         }).catch(handleError);
         removedSteps.forEach(step => {
             const stepUrl = step.url;
-            baseUrlApi.delete(stepUrl, authHeader()).then(() => {
-                alertify.success('Step removed');
-            }).catch(handleError);
+            baseUrlApi.delete(stepUrl, authHeader());
         });
         removedCriteria.forEach(criterion => {
             const criterionUrl = criterion.url;
-            baseUrlApi.delete(criterionUrl, authHeader()).then(() => {
-                alertify.success('Criterion removed');
-            }).catch(handleError);
+            baseUrlApi.delete(criterionUrl, authHeader());
         });
     } else {
         baseUrlApi.post('/tasks', task, authHeader()).then(res => {
             const taskUrl = linkUtils.linkUrl(res.data._links.self);
             steps.forEach(step => {
-                baseUrlApi.post('/taskSteps', {...step, task: taskUrl}, authHeader()).then(() => {
-                    alertify.success('Step created');
-                });
+                baseUrlApi.post('/taskSteps', {...step, task: taskUrl}, authHeader());
             });
             criteria.forEach(criterion => {
-                baseUrlApi.post('/criteria', {...criterion, task: taskUrl}, authHeader()).then(() => {
-                    alertify.success('Criterion created');
-                });
+                baseUrlApi.post('/criteria', {...criterion, task: taskUrl}, authHeader());
             });
             baseUrlApi.get(linkUtils.linkUrlWithProjection(res.data._links.self, 'full'), authHeader()).then(res => {
-                alertify.success('Task created');
                 dispatch({
                     type: 'TASK_CREATED',
                     task: res.data
                 });
                 history.push('/task');
+                alertify.success('Task created');
             });
         }).catch(handleError);
     }
