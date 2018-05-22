@@ -43,6 +43,8 @@ class ProjectPage extends Component {
         ) : this.props.tasks._embedded.tasks
     ) : [];
 
+    taskAssignee = (task) => task.assignee ? task.assignee.account.fullName : ' - ';
+
     isCurrent = (task) => this.props.selected ? this.props.selected._links.self.href === task._links.self.href : false;
 
     onSearch = e => this.setState({search: e.target.value});
@@ -70,7 +72,7 @@ class ProjectPage extends Component {
     render() {
         const list = this.tasksList().map(task => (
             <Card className={'selectable-item mb-3' + (this.isCurrent(task) ? ' selected' : '')}
-                  key={task._links.self.href} onClick={() => this.onSelect(task)}>
+                  key={task._links.self.href} onClick={() => this.onSelect(task)} onDoubleClick={this.onOpenTask}>
                 <CardBody>
                     <Row>
                         <Col>
@@ -89,6 +91,7 @@ class ProjectPage extends Component {
                             </Row>
                         </Col>
                         <Col>{task.status}</Col>
+                        <Col>{this.taskAssignee(task)}</Col>
                     </Row>
                 </CardBody>
             </Card>
