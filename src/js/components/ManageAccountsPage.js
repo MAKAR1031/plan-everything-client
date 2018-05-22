@@ -43,11 +43,19 @@ class ManageAccountsPage extends Component {
 
     onSearch = e => this.setState({search: e.target.value});
 
-    onLock = () => this.props.lock(this.props.selected);
+    onLock = () => {
+        if (this.checkLink('lock')) {
+            this.props.lock(this.props.selected);
+        } else {
+            this.props.unlock(this.props.selected);
+        }
+    };
 
-    onUnlock = () => this.props.unlock(this.props.selected);
+    lockButtonText = () => this.checkLink('lock') ? 'Lock' : 'Unlock';
 
     onChangeRole = () => this.props.openChangeRoleDialog();
+
+    lockButtonEnabled = () => this.checkLink('lock') || this.checkLink('unlock');
 
     checkLink = (name) => this.props.selected && this.props.selected._links[name];
 
@@ -71,30 +79,6 @@ class ManageAccountsPage extends Component {
             </Card>
         )) : <Container>Loading...</Container>;
 
-        const lockAction = this.checkLink('lock') ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onLock}>Lock</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const unlockAction = this.checkLink('unlock') ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onUnlock}>Unlock</Button>
-                </Col>
-            </Row>
-        ) : '';
-
-        const changeRoleAction = this.checkLink('changeRole') ? (
-            <Row>
-                <Col>
-                    <Button color='primary' onClick={this.onChangeRole}>Change role</Button>
-                </Col>
-            </Row>
-        ) : '';
-
         return (
             <Container fluid={true}>
                 <Row>
@@ -110,9 +94,24 @@ class ManageAccountsPage extends Component {
                     <Col sm={2} className='right-menu'>
                         <Container fluid={true} className='h-50'/>
                         <Container fluid={true} className='actions-container'>
-                            {lockAction}
-                            {unlockAction}
-                            {changeRoleAction}
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.lockButtonEnabled()}
+                                            onClick={this.onLock}>
+                                        {this.lockButtonText()}
+                                    </Button>
+                                </Col>
+                            </Row>
+                            <Row>
+                                <Col>
+                                    <Button color='primary'
+                                            disabled={!this.checkLink('changeRole')}
+                                            onClick={this.onChangeRole}>
+                                        Change role
+                                    </Button>
+                                </Col>
+                            </Row>
                         </Container>
                     </Col>
                 </Row>
