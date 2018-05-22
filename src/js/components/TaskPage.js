@@ -88,6 +88,14 @@ class TaskPage extends Component {
         this.props.selected.assignee ? this.props.selected.assignee.account.fullName : 'unassigned'
     ) : '';
 
+    progressColor = () => {
+        if (this.stepsCompleted() === this.stepsTotal() && this.stepsTotal() !== 0) {
+            return 'success';
+        } else {
+            return 'primary';
+        }
+    };
+
     canEdit = () => this.props.selected ? this.props.selected._links.edit != null : false;
 
     canDelete = () => this.props.selected ? this.props.selected._links.delete != null : false;
@@ -199,8 +207,10 @@ class TaskPage extends Component {
                             </Container>
                             <Container className='mb-4 p-3'>
                                 <h5>Steps</h5>
-                                <Progress value={this.stepsCompleted()} max={this.stepsTotal()}>
-                                    {this.stepsCompleted()}/{this.stepsTotal()}
+                                <Progress value={this.stepsCompleted()}
+                                          max={this.stepsTotal()}
+                                          color={this.progressColor()}>
+                                    {this.stepsCompleted()} / {this.stepsTotal()}
                                 </Progress>
                                 <Container className='mt-4'>
                                     {stepList}
