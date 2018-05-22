@@ -27,7 +27,7 @@ class TaskCriterion extends Component {
                         <FontAwesome name='times' size='2x'/>
                     </button>
                 </Col>
-                <Col sm={7}>
+                <Col>
                     <FormGroup>
                         <Input name='name'
                                type='text'
@@ -38,7 +38,7 @@ class TaskCriterion extends Component {
                         <FormFeedback>Name is required</FormFeedback>
                     </FormGroup>
                 </Col>
-                <Col sm={4}>
+                <Col sm={3}>
                     <FormGroup>
                         <Input name='expectedValue'
                                type='number'

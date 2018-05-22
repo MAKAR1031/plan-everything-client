@@ -35,7 +35,7 @@ class EditableTaskStep extends Component {
                         <FontAwesome name='times' size='2x'/>
                     </button>
                 </Col>
-                <Col sm={6}>
+                <Col>
                     <FormGroup>
                         <Input name='name'
                                type='text'
@@ -46,10 +46,12 @@ class EditableTaskStep extends Component {
                         <FormFeedback>Invalid name</FormFeedback>
                     </FormGroup>
                 </Col>
-                <Col sm={3}>
-                    <Label for={'stepNeedReport' + this.props.index}>Need report</Label>
-                </Col>
                 <Col sm={2}>
+                    <Label for={'stepNeedReport' + this.props.index}>
+                        <FontAwesome name='file' size='2x' title='Need report'/>
+                    </Label>
+                </Col>
+                <Col sm={1} className='text-center'>
                     <Input id={'stepNeedReport' + this.props.index}
                            name='needReport'
                            type='checkbox'
