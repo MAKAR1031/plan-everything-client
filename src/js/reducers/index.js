@@ -7,6 +7,7 @@ import accountManagement from './manage_accounts';
 import account from './account';
 import projects from './projects';
 import currentProject from './current_project';
+import projectProgress from './project_progress';
 import tasks from './tasks';
 import projectAuthors from './project_authors';
 import currentProjectMembers from './current_project_members';
@@ -22,6 +23,7 @@ export default combineReducers({
     account,
     projects,
     currentProject,
+    projectProgress,
     tasks,
     projectAuthors,
     currentProjectMembers,

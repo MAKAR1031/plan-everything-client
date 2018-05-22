@@ -41,3 +41,13 @@ export const selectProject = (project) => dispatch => {
     });
     history.push('/project');
 };
+
+export const loadProgress = (project) => dispatch => {
+    const url = linkUtils.linkUrl(project._links.progress);
+    baseUrlApi.get(url, authHeader()).then(res => {
+        dispatch({
+            type: 'PROJECT_PROGRESS_LOADED',
+            progress: res.data
+        })
+    }).catch(handleError);
+};

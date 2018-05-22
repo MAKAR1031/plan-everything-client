@@ -6,6 +6,7 @@ import {Link} from "react-router-dom";
 import {loadTasks, open, select, startCreateNewTask, startEditTask} from '../actions/tasks_actions';
 import ReactMarkdown from 'react-markdown';
 import Search from "./Search";
+import ProjectProgress from './ProjectProgress';
 import {parseDate} from "../util/time_utils";
 
 class ProjectPage extends Component {
@@ -99,9 +100,11 @@ class ProjectPage extends Component {
                     <Col sm={10}>
                         <Container fluid={true} className='main-container'>
                             <h2 className='text-center mt-2 mb-3'>{this.projectName()}</h2>
+                            <ProjectProgress/>
                             <Container className='mb-4'>
                                 <ReactMarkdown source={this.projectDescription()}/>
                             </Container>
+                            <h3 className='text-center'>Tasks</h3>
                             <Search placeholder='Search task...'
                                     query={this.state.search}
                                     onSearchHandler={this.onSearch}/>
